@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ANIME DASHBOARD | SISTEM PANGKALAN DATA</title>
+    
+    <!-- Google Fonts: Bebas Neue -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        :root {
+            --primary: #ff2d55; /* Red Pink */
+            --accent: #ffb700; /* Orange Gold */
+            --white: #ffffff;
+            --bg-dark: #0a0a0c;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glow-red: 0 0 15px rgba(255, 45, 85, 0.8);
+            --glow-gold: 0 0 20px rgba(255, 183, 0, 0.6);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 1px;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--white);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* --- BACKGROUND EFFECTS --- */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #1a0005, #000000, #0d001a);
+            overflow: hidden;
+        }
+
+        /* Placeholder for Anime Action Video/Gif Background */
+        .anime-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1578632292335-df3abbb0d586?auto=format&fit=crop&q=80&w=1920') no-repeat center center;
+            background-size: cover;
+            opacity: 0.2;
+            filter: saturate(1.5) blur(2px);
+            animation: pulseBg 10s infinite alternate;
+        }
+
+        @keyframes pulseBg {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, var(--primary) 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            animation: moveParticles 20s linear infinite;
+        }
+
+        @keyframes moveParticles {
+            from { transform: translateY(0); }
+            to { transform: translateY(-1000px); }
+        }
+
+        /* --- HEADER --- */
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            border-bottom: 2px solid var(--primary);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--glow-red);
+        }
+
+        .logo {
+            font-size: 2rem;
+            color: var(--primary);
+            text-shadow: var(--glow-red);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: 0.3s;
+            box-shadow: var(--glow-gold);
+        }
+
+        nav a:hover::after { width: 100%; }
+        nav a:hover { color: var(--accent); text-shadow: var(--glow-gold); }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 6rem;
+            text-transform: uppercase;
+            background: linear-gradient(to bottom, #fff, var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 20px var(--primary));
+            animation: titleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes titleFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .btn-aura {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+            box-shadow: var(--glow-red);
+            margin-top: 20px;
+        }
+
+        .btn-aura:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px var(--primary), 0 0 60px var(--accent);
+        }
+
+        .btn-aura::before {
+            content: '';
+            position: absolute;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+            animation: auraRotate 4s linear infinite;
+        }
+
+        @keyframes auraRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* --- DASHBOARD & STORAGE --- */
+        .main-container {
+            padding: 50px 5%;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        .side-panel {
+            background: var(--glass);
+            border: 1px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            height: fit-content;
+        }
+
+        .clock-box {
+            text-align: center;
+            padding: 20px;
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+            box-shadow: inset 0 0 15px var(--accent);
+        }
+
+        #clock-time { font-size: 3rem; color: var(--accent); line-height: 1; }
+        #clock-date { font-size: 1.2rem; color: #ccc; }
+
+        .stat-bar {
+            margin: 15px 0;
+        }
+
+        .progress-bg {
+            width: 100%;
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 75%;
+            box-shadow: 0 0 10px var(--primary);
+            animation: energyFill 2s ease-out;
+        }
+
+        /* --- UPLOAD SYSTEM --- */
+        .upload-section {
+            background: var(--glass);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .category-card {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--primary);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .category-card:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: var(--glow-red);
+        }
+
+        .drop-zone {
+            border: 2px dashed var(--accent);
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            transition: 0.3s;
+        }
+
+        .drop-zone:hover { background: rgba(255, 183, 0, 0.1); }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .item-card {
+            background: var(--glass);
+            border: 1px solid var(--primary);
+            padding: 10px;
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .item-card:hover {
+            transform: scale(1.05);
+            border-color: var(--accent);
+            box-shadow: var(--glow-gold);
+        }
+
+        .item-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+
+        .delete-btn {
+            background: var(--primary);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+            clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+        }
+
+        /* --- VERSION BOX --- */
+        .version-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            box-shadow: var(--glow-red);
+            animation: floating 3s infinite ease-in-out;
+            cursor: help;
+        }
+
+        @keyframes floating {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        footer {
+            padding: 40px;
+            text-align: center;
+            border-top: 1px solid var(--glass);
+            margin-top: 50px;
+        }
+
+        .glowing-line {
+            height: 2px;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin-bottom: 20px;
+        }
+
+        /* Auth UI */
+        .auth-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+        }
+
+        .hidden { display: none; }
+
+        @media (max-width: 768px) {
+            .main-container { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 3.5rem; }
+            nav ul { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="animated-bg">
+        <div class="anime-overlay"></div>
+        <div class="particles"></div>
+    </div>
+
+    <div class="auth-container">
+        <button id="login-btn" class="btn-aura" style="font-size: 1rem; padding: 10px 20px;">LOG MASUK GOOGLE</button>
+        <button id="logout-btn" class="btn-aura hidden" style="font-size: 1rem; padding: 10px 20px;">LOG KELUAR</button>
+    </div>
+
+    <header>
+        <div class="logo">
+            <span style="color: var(--accent);">✦</span> SHINOBI DATA
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#">UTAMA</a></li>
+                <li><a href="#">MUAT NAIK</a></li>
+                <li><a href="#">PANGKALAN</a></li>
+                <li><a href="#">PANEL</a></li>
+                <li><a href="#">TETAPAN</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h1 data-text="SYSTEM ACTIVE">SISTEM AKTIF</h1>
+        <p style="letter-spacing: 5px; color: var(--accent);">PENGURUSAN DATA ANIME GENERASI BARU</p>
+        <button class="btn-aura" onclick="document.getElementById('upload-area').scrollIntoView({behavior: 'smooth'})">MULAKAN MUAT NAIK</button>
+    </section>
+
+    <div class="main-container">
+        <aside class="side-panel">
+            <div class="clock-box">
+                <div id="clock-day">ISNIN</div>
+                <div id="clock-time">00:00:00</div>
+                <div id="clock-date">01 JANUARI 2024</div>
+            </div>
+
+            <h3 style="color: var(--primary); margin-bottom: 15px;">STATISTIK PANEL</h3>
+            <div class="stat-bar">
+                <span>JUMLAH MUAT NAIK</span>
+                <div class="progress-bg"><div class="progress-fill" style="width: 85%;"></div></div>
+            </div>
+            <div class="stat-bar">
+                <span>KAD MINYAK</span>
+                <div class="progress-bg"><div class="progress-fill" style="width: 40%; background: var(--accent);"></div></div>
+            </div>
+            <div class="stat-bar">
+                <span>ODOMETER</span>
+                <div class="progress-bg"><div class="progress-fill" style="width: 60%;"></div></div>
+            </div>
+        </aside>
+
+        <main class="upload-section" id="upload-area">
+            <h2 style="margin-bottom: 20px; border-left: 5px solid var(--primary); padding-left: 15px;">KATEGORI MUAT NAIK</h2>
+            
+            <div class="upload-grid">
+                <div class="category-card" onclick="selectCategory('Resit')">RESIT</div>
+                <div class="category-card" onclick="selectCategory('Kad Minyak')">KAD MINYAK</div>
+                <div class="category-card" onclick="selectCategory('Kad TNG')">KAD TNG</div>
+                <div class="category-card" onclick="selectCategory('Odometer')">ODOMETER</div>
+            </div>
+
+            <div class="drop-zone" id="drop-zone">
+                <p id="selected-label">SILA PILIH KATEGORI & SERET GAMBAR KE SINI</p>
+                <input type="file" id="file-input" hidden accept="image/*">
+                <button class="btn-aura" style="margin-top: 10px; padding: 5px 20px;" onclick="document.getElementById('file-input').click()">PILIH FAIL</button>
+            </div>
+
+            <h2 style="margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 15px;">DATA TERSIMPAN</h2>
+            <div class="data-grid" id="data-grid">
+                <!-- Cards dynamically added here -->
+            </div>
+        </main>
+    </div>
+
+    <div class="version-box">
+        VERSION v1.0.0-STABLE
+    </div>
+
+    <footer>
+        <div class="glowing-line"></div>
+        <p>© 2024 SHINOBI DATA SYSTEM | REKAAN SENI KOMIK CINEMATIC</p>
+    </footer>
+
+    <script>
+        // --- CONFIGURASI SUPABASE ---
+        // Sila masukkan URL dan Key anda sendiri
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let currentCategory = "Resit";
+
+        // --- CLOCK SYSTEM ---
+        function updateClock() {
+            const now = new Date();
+            const days = ['AHAD', 'ISNIN', 'SELASA', 'RABU', 'KHAMIS', 'JUMAAT', 'SABTU'];
+            const months = ['JANUARI', 'FEBRUARI', 'MAC', 'APRIL', 'MEI', 'JUN', 'JULAI', 'OGOS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DISEMBER'];
+            
+            document.getElementById('clock-day').innerText = days[now.getDay()];
+            document.getElementById('clock-time').innerText = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('clock-date').innerText = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- UPLOAD LOGIC ---
+        function selectCategory(cat) {
+            currentCategory = cat;
+            document.getElementById('selected-label').innerText = `KATEGORI: ${cat.toUpperCase()} (SIAP UNTUK MUAT NAIK)`;
+            document.querySelectorAll('.category-card').forEach(c => c.style.borderColor = 'var(--primary)');
+            event.currentTarget.style.borderColor = 'var(--accent)';
+        }
+
+        const fileInput = document.getElementById('file-input');
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handleUpload(file);
+        });
+
+        function handleUpload(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const item = {
+                    id: Date.now(),
+                    category: currentCategory,
+                    img: e.target.result,
+                    date: new Date().toLocaleDateString()
+                };
+                saveToLocal(item);
+                renderData();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function saveToLocal(item) {
+            let data = JSON.parse(localStorage.getItem('anime_data') || '[]');
+            data.push(item);
+            localStorage.setItem('anime_data', JSON.stringify(data));
+        }
+
+        function renderData() {
+            const grid = document.getElementById('data-grid');
+            const data = JSON.parse(localStorage.getItem('anime_data') || '[]');
+            grid.innerHTML = '';
+            
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'item-card';
+                card.innerHTML = `
+                    <img src="${item.img}" alt="upload">
+                    <div style="margin-top:10px;">
+                        <small style="color:var(--accent)">${item.category}</small>
+                        <p style="font-size:0.8rem">${item.date}</p>
+                    </div>
+                    <button class="delete-btn" onclick="deleteItem(${item.id})">PADAM</button>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function deleteItem(id) {
+            let data = JSON.parse(localStorage.getItem('anime_data') || '[]');
+            data = data.filter(i => i.id !== id);
+            localStorage.setItem('anime_data', JSON.stringify(data));
+            renderData();
+        }
+
+        // --- SUPABASE AUTH (GOOGLE) ---
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        loginBtn.addEventListener('click', async () => {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: 'google',
+            });
+            if (error) alert("Ralat Login: " + error.message);
+        });
+
+        logoutBtn.addEventListener('click', async () => {
+            await supabase.auth.signOut();
+            window.location.reload();
+        });
+
+        // Semak status login
+        async function checkUser() {
+            const { data: { user } } = await supabase.auth.getUser();
+            if (user) {
+                loginBtn.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+                console.log("User logged in:", user.email);
+            }
+        }
+
+        // --- MOUSE TRAIL EFFECT ---
+        document.addEventListener('mousemove', (e) => {
+            const trail = document.createElement('div');
+            trail.style.position = 'fixed';
+            trail.style.width = '5px';
+            trail.style.height = '5px';
+            trail.style.background = 'var(--accent)';
+            trail.style.borderRadius = '50%';
+            trail.style.pointerEvents = 'none';
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            trail.style.boxShadow = '0 0 10px var(--accent)';
+            trail.style.zIndex = '9999';
+            document.body.appendChild(trail);
+
+            setTimeout(() => {
+                trail.style.transition = '0.5s';
+                trail.style.opacity = '0';
+                trail.style.transform = 'scale(2)';
+                setTimeout(() => trail.remove(), 500);
+            }, 50);
+        });
+
+        // Initialize
+        renderData();
+        checkUser();
+
+    </script>
+</body>
+</html>
