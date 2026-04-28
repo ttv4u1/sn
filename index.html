@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHINOBI DATA v1.18.0 | DYNAMIC ISLAND PRO</title>
+    <title>SHINOBI DATA v1.38.0 | DUAL GLASS PRO</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -14,203 +14,241 @@
             --primary: #ff5e00;
             --gold-gradient: linear-gradient(135deg, #ff9a00 0%, #ffcc00 50%, #ff9a00 100%);
             --sky-blue: #00a2ff;
-            --bg-dark: #060b13;
-            --island-bg: #000000;
+            
+            /* Default White Theme Variables */
+            --glass-bg: rgba(255, 255, 255, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --text-main: #1a1a1a;
+            --panel-bg: rgba(255, 255, 255, 0.7);
+            --sidebar-bg: rgba(255, 255, 255, 0.8);
+            --card-bg: #ffffff;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Bebas Neue', cursive; letter-spacing: 1.5px; }
+        /* Grey Theme Class */
+        body.grey-mode {
+            --glass-bg: rgba(30, 30, 35, 0.5);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --text-main: #f0f0f0;
+            --panel-bg: rgba(20, 20, 25, 0.8);
+            --sidebar-bg: rgba(10, 10, 15, 0.9);
+            --card-bg: #1e1e24;
+        }
+
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Bebas Neue', cursive !important; 
+            letter-spacing: 1.5px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
 
         body { 
-            background-color: var(--bg-dark); 
-            color: #fff; 
+            background-color: #000; 
+            color: var(--text-main); 
             min-height: 100vh;
-            background: 
-                linear-gradient(rgba(6, 11, 19, 0.8), rgba(6, 11, 19, 0.95)),
+            background-image: 
+                linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
                 url('https://copilot.microsoft.com/th/id/BCO.f03d4abf-cf53-4d80-bf30-9efc53a2bb81.png');
             background-size: cover;
             background-attachment: fixed;
             background-position: center;
+            overflow-x: hidden;
         }
 
-        /* SHINOBI DYNAMIC ISLAND (LIVE NOTIF) */
-        #dynamic-island {
-            position: fixed;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 200px; /* Initial width */
-            height: 35px;
-            background: var(--island-bg);
-            border-radius: 30px;
-            z-index: 10002;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 15px;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-            border: 1px solid rgba(255,255,255,0.1);
-            overflow: hidden;
+        /* HEADER GLASS TRANSPARENT */
+        header {
+            padding: 15px 5%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 3px solid var(--primary);
+            position: sticky; top: 0; z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
-        #dynamic-island.active {
-            width: 90%;
-            max-width: 400px;
-            height: 80px;
-            border-radius: 20px;
-            padding: 15px;
+        .header-stickers {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: -1; opacity: 0.4;
         }
 
-        .island-content { display: flex; align-items: center; width: 100%; gap: 12px; }
-        .island-icon { font-size: 1.2rem; min-width: 25px; }
-        .island-info { flex: 1; display: none; }
-        #dynamic-island.active .island-info { display: block; }
-        
-        .island-title { font-size: 0.9rem; color: var(--sky-blue); display: flex; justify-content: space-between; }
-        .island-bar-bg { width: 100%; height: 6px; background: #222; border-radius: 10px; margin-top: 5px; overflow: hidden; }
-        #island-progress { width: 0%; height: 100%; background: var(--primary); transition: 0.3s; }
-
-        .quick-upload-btn {
+        /* PREMIUM VERSION BOX - REALISTIC ANIMATED */
+        .ver-box-premium {
             background: var(--gold-gradient);
-            color: #000;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 1.2rem;
-            border: none;
+            border: 2px solid #fff; border-radius: 8px;
+            padding: 6px 15px; color: #000; font-size: 1.1rem;
+            box-shadow: 0 0 20px rgba(255, 154, 0, 0.5), inset 0 0 10px rgba(255,255,255,0.8);
+            position: relative; overflow: hidden;
+            animation: floatVer 3s infinite ease-in-out;
         }
+        .ver-box-premium::after {
+            content: ''; position: absolute; top: -100%; left: -100%; width: 50%; height: 300%;
+            background: rgba(255,255,255,0.8); transform: rotate(45deg); animation: shimmer 2.5s infinite;
+        }
+        @keyframes shimmer { 0% { left: -120%; } 100% { left: 150%; } }
+        @keyframes floatVer { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
 
-        /* PREMIUM GOLD BOX v1.18.0 */
-        .premium-box {
-            background: var(--gold-gradient);
-            padding: 8px 20px;
-            border-radius: 8px;
-            color: #000;
-            display: inline-flex;
-            align-items: center;
-            font-size: 1.2rem;
-            box-shadow: 0 0 25px rgba(255, 154, 0, 0.4);
-            border: 2px solid #fff;
-            transform: perspective(500px) rotateX(10deg);
-            animation: float 3s infinite ease-in-out;
+        /* THEME TOGGLE BUTTONS */
+        .theme-switch { display: flex; gap: 10px; margin-right: 20px; }
+        .theme-btn {
+            width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
-        @keyframes float { 0%, 100% { transform: perspective(500px) rotateX(10deg) translateY(0); } 50% { transform: perspective(500px) rotateX(10deg) translateY(-5px); } }
+        .btn-white { background: #fff; }
+        .btn-grey { background: #333; }
 
-        /* BUTTONS */
-        .cute-btn {
-            background: var(--sky-blue);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50px;
-            border: 4px solid rgba(255,255,255,0.3);
-            font-size: 1.3rem;
-            cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 0px #0077bb;
+        /* HUD COMPACT BOX */
+        .chrono-hud {
+            background: var(--panel-bg);
+            border: 4px solid var(--glass-border);
+            border-radius: 20px; padding: 20px; text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            margin-bottom: 25px; backdrop-filter: blur(10px);
         }
-        .cute-btn::after {
+        .hud-time { font-size: 3.5rem; color: var(--primary); line-height: 1; text-shadow: 0 0 10px rgba(255, 94, 0, 0.2); }
+        .hud-day { font-size: 1.5rem; color: var(--sky-blue); margin-bottom: 5px; }
+
+        /* REALISTIC CATEGORY BOXES */
+        .cat-grid { display: grid; gap: 12px; }
+        .pill { 
+            background: var(--glass-bg);
+            border: 2px solid var(--glass-border);
+            padding: 15px; border-radius: 12px; cursor: pointer;
+            text-align: left; font-size: 1.2rem; color: var(--text-main);
+            position: relative; overflow: hidden;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.2);
+        }
+        .pill:hover { transform: translateX(8px); border-color: var(--sky-blue); }
+        .pill.active { 
+            background: var(--primary); color: #fff; border-color: #fff;
+            box-shadow: 0 10px 20px rgba(255, 94, 0, 0.4);
+        }
+        /* Shining Effect on Pills */
+        .pill::before {
             content: ''; position: absolute; top: -50%; left: -150%; width: 50%; height: 200%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-            transform: rotate(25deg); animation: shine 3s infinite;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transform: rotate(25deg); animation: shine 5s infinite;
         }
-        @keyframes shine { 0% { left: -150%; } 20% { left: 150%; } 100% { left: 150%; } }
+        @keyframes shine { 0% { left: -150%; } 15% { left: 150%; } 100% { left: 150%; } }
+
+        /* REALISTIC ENTRY CARDS */
+        .archive-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .card { 
+            background: var(--card-bg); border: 4px solid var(--text-main);
+            border-radius: 15px; padding: 12px; color: var(--text-main);
+            box-shadow: 8px 8px 0px var(--primary);
+        }
+        .card-img { width: 100%; height: 160px; object-fit: cover; border-radius: 8px; border: 2px solid var(--text-main); cursor: zoom-in; }
+
+        /* AUTO-HIDE GHOST DIALOG */
+        #ghost-dialog {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%) translateY(50px);
+            width: 90%; max-width: 400px;
+            background: var(--panel-bg); backdrop-filter: blur(25px);
+            border: 2px solid var(--primary); border-radius: 100px;
+            padding: 12px 25px; display: flex; align-items: center; gap: 15px;
+            z-index: 10001; opacity: 0; visibility: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        #ghost-dialog.active { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
+        .ai-icon { width: 40px; height: 40px; background: var(--gold-gradient); border-radius: 50%; border: 2px solid #fff; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+
+        /* DYNAMIC ISLAND */
+        #dynamic-island {
+            position: fixed; top: 12px; left: 50%; transform: translateX(-50%);
+            width: 170px; height: 35px; background: #000; border-radius: 30px;
+            z-index: 10002; display: flex; align-items: center; justify-content: space-between;
+            padding: 0 15px; border: 1.5px solid #333;
+        }
+        #dynamic-island.active { width: 90%; max-width: 420px; height: 80px; }
 
         /* LAYOUT */
-        header { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
-        .main-container { display: grid; grid-template-columns: 350px 1fr; gap: 30px; padding: 40px 5%; }
-        
-        .side-bar { background: rgba(255,255,255,0.05); backdrop-filter: blur(20px); border-radius: 30px; padding: 30px; border: 1px solid rgba(255,255,255,0.1); height: fit-content; position: sticky; top: 100px; }
-        .clock-display { font-size: 3.5rem; color: var(--primary); text-align: center; margin-bottom: 20px; }
+        .main-container { display: grid; grid-template-columns: 350px 1fr; gap: 30px; padding: 30px 5% 120px 5%; }
+        .sidebar { position: sticky; top: 110px; height: fit-content; }
+        .upload-section { 
+            background: var(--panel-bg); border: 2px dashed var(--primary); 
+            padding: 60px 20px; text-align: center; border-radius: 25px; cursor: pointer; margin-bottom: 30px;
+        }
 
-        .cat-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; justify-content: center; }
-        .pill { background: rgba(255,255,255,0.1); border: none; color: #fff; padding: 8px 15px; border-radius: 12px; cursor: pointer; font-size: 1rem; }
-        .pill.active { background: #fff; color: #000; }
-
-        .upload-card { background: rgba(0, 162, 255, 0.05); border: 3px dashed var(--sky-blue); border-radius: 40px; padding: 50px 20px; text-align: center; cursor: pointer; }
-        .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 30px; }
-        .item-card { background: #fff; color: #000; border-radius: 20px; padding: 10px; transition: 0.3s; }
-        .item-img { width: 100%; height: 160px; border-radius: 15px; object-fit: cover; }
-        
         #modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 10000; display: none; justify-content: center; align-items: center; }
-        #modal img { max-width: 90%; max-height: 80vh; border-radius: 20px; border: 5px solid #fff; }
+        #modal img { max-width: 90%; max-height: 85vh; border: 8px solid #fff; border-radius: 20px; }
 
-        @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } .side-bar { position: relative; top: 0; } }
+        @media (max-width: 1050px) { .main-container { grid-template-columns: 1fr; } .sidebar { position: relative; top: 0; } }
     </style>
 </head>
-<body>
+<body class="white-mode">
 
-    <!-- SHINOBI DYNAMIC ISLAND -->
+    <!-- DYNAMIC ISLAND -->
     <div id="dynamic-island">
-        <div class="island-content">
-            <div class="island-icon">🥷</div>
-            <div class="island-info">
-                <div class="island-title">
-                    <span id="island-status">LIVE SYSTEM</span>
-                    <span id="island-percent">0%</span>
+        <div style="display:flex; align-items:center; width:100%; gap:12px;">
+            <div style="font-size:1.4rem;">🥷</div>
+            <div id="isl-info" style="flex: 1; display: none;">
+                <div style="font-size:1rem; display:flex; justify-content:space-between; color:#fff;">
+                    <span id="isl-status">SYNCING</span>
+                    <span id="isl-percent">0%</span>
                 </div>
-                <div class="island-bar-bg">
-                    <div id="island-progress"></div>
+                <div style="width:100%; height:6px; background:#222; border-radius:10px; margin-top:5px; overflow:hidden;">
+                    <div id="isl-progress" style="width:0%; height:100%; background:var(--gold-gradient);"></div>
                 </div>
             </div>
-            <!-- Quick Upload Trigger from Notification -->
-            <button class="quick-upload-btn" onclick="document.getElementById('f-input').click()">+</button>
+            <div style="background:var(--gold-gradient); width:25px; height:25px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:#000; font-weight:bold; cursor:pointer;" onclick="document.getElementById('f-input').click()">+</div>
         </div>
-    </div>
-
-    <div id="modal" onclick="this.style.display='none'">
-        <img id="modal-img" src="">
     </div>
 
     <header>
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <div style="font-size: 2.2rem;">SHINOBI DATA</div>
-            <div class="premium-box">v1.18.0 PRO</div>
+        <div class="header-stickers"><span style="position:absolute; left:10%; top:20%;">✨</span><span style="position:absolute; right:15%; bottom:20%;">📊</span></div>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <div style="width:50px; height:50px; background:var(--gold-gradient); border-radius:10px; border:2px solid #fff; display:flex; align-items:center; justify-content:center; font-size:1.5rem; box-shadow:0 10px 20px rgba(0,0,0,0.2);">🥷</div>
+            <h1 style="font-size: 2.2rem;">SHINOBI DATA</h1>
+            <div class="ver-box-premium">v1.38.0 PRO</div>
         </div>
-        <div id="auth-box">
-            <button id="login-btn" class="cute-btn" style="background:#ff9100; box-shadow: 0 8px 0 #cc7400;">GOOGLE LOGIN</button>
-            <button id="logout-btn" class="cute-btn" style="display:none; background:#444; box-shadow: 0 8px 0 #222;">LOGOUT</button>
+
+        <div style="display:flex; align-items:center;">
+            <div class="theme-switch">
+                <div class="theme-btn btn-white" onclick="setTheme('white')"></div>
+                <div class="theme-btn btn-grey" onclick="setTheme('grey')"></div>
+            </div>
+            <div id="login-btn" style="background:#fff; padding:8px 20px; border-radius:8px; border:1px solid #ddd; cursor:pointer; color:#000; font-weight:bold;">GOOGLE LOGIN</div>
+            <button id="logout-btn" style="display:none; background:#000; color:#fff; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">EXIT</button>
         </div>
     </header>
 
     <div class="main-container">
-        <aside>
-            <div class="side-bar">
-                <div id="day-now" style="font-size: 1.8rem; text-align: center; color: var(--sky-blue);">DAY</div>
-                <div id="clock-now" class="clock-display">00:00:00 AM</div>
-                
-                <div style="text-align:center;">
-                    <p>PILIH KATEGORI</p>
-                    <div class="cat-pills">
-                        <button class="pill active" onclick="setCat('Resit', this)">RESIT</button>
-                        <button class="pill" onclick="setCat('Logistik', this)">LOGISTIK</button>
-                        <button class="pill" onclick="setCat('Minyak', this)">MINYAK</button>
-                        <button class="pill" onclick="setCat('Lain', this)">LAIN</button>
-                    </div>
-                </div>
+        <aside class="sidebar">
+            <div class="chrono-hud">
+                <div class="hud-day" id="hud-day">DAY</div>
+                <div class="hud-time" id="hud-time">00:00:00</div>
+                <div id="hud-ampm" style="color:var(--primary); font-size:1.2rem;">--</div>
+            </div>
 
-                <div style="background:rgba(255,255,255,0.1); border-radius:20px; padding:20px; text-align:center; margin-top:20px;">
-                    <p style="opacity:0.6;">DATABASE TOTAL</p>
-                    <h2 id="stat-count" style="font-size:3.5rem; color:var(--sky-blue);">0</h2>
-                </div>
+            <div class="cat-grid">
+                <div class="pill active" onclick="setCat('Resit', this)">📜 RESIT DIVISION</div>
+                <div class="pill" onclick="setCat('Logistik', this)">📦 LOGISTIC HUB</div>
+                <div class="pill" onclick="setCat('Minyak', this)">⛽ FUEL ARCHIVE</div>
+                <div class="pill" onclick="setCat('Buku Log', this)">📓 MISSION LOGS</div>
+                <div class="pill" onclick="setCat('Lain', this)">㊙️ HIDDEN DATA</div>
+            </div>
+
+            <div style="background:var(--panel-bg); padding:20px; border-radius:20px; margin-top:25px; text-align:center; border:3px solid var(--text-main);">
+                <p style="opacity:0.6;">ENTRIES SECURED</p>
+                <h2 id="stat-count" style="font-size:4rem; color:var(--sky-blue);">0</h2>
             </div>
         </aside>
 
         <main>
-            <div class="upload-card" onclick="document.getElementById('f-input').click()">
-                <div style="font-size: 2.5rem;">✦ SIMPAN ARKIB ✦</div>
-                <p style="color: var(--sky-blue);">TEKAN UNTUK PILIH FAIL (HEIC/JPG/PNG)</p>
+            <div class="upload-section" onclick="document.getElementById('f-input').click()">
+                <h2 style="font-size: 2.8rem;">✦ EXECUTE DATA SUMMON ✦</h2>
+                <p style="font-size: 1.2rem; color: var(--primary);">HEIC / JPG / PNG / PDF</p>
                 <input type="file" id="f-input" hidden accept="image/*,.heic,.pdf">
             </div>
-
-            <div class="gallery" id="data-grid"></div>
+            <div class="archive-grid" id="data-grid"></div>
         </main>
     </div>
+
+    <!-- GHOST DIALOG -->
+    <div id="ghost-dialog">
+        <div class="ai-icon">🥷</div>
+        <div id="ai-text" style="font-size: 0.95rem; text-transform: uppercase; color:var(--text-main);">... SYSTEM INITIALIZING ...</div>
+    </div>
+
+    <div id="modal" onclick="this.style.display='none'"><img id="modal-img"></div>
 
     <script>
         const SUPABASE_URL = 'https://wacziigqqdmfhkrycdrf.supabase.co';
@@ -219,38 +257,56 @@
 
         let currentUser = null;
         let currentCat = "Resit";
+        let aiTimeout = null;
 
-        // --- DYNAMIC ISLAND ENGINE ---
+        function setTheme(t) {
+            document.body.className = (t === 'grey') ? 'grey-mode' : 'white-mode';
+            sendAI("THEME SWITCHED TO " + t.toUpperCase() + " MODE");
+        }
+
+        function sendAI(text) {
+            const ai = document.getElementById('ghost-dialog');
+            const txt = document.getElementById('ai-text');
+            if(aiTimeout) clearTimeout(aiTimeout);
+            ai.classList.add('active');
+            txt.innerText = text;
+            aiTimeout = setTimeout(() => ai.classList.remove('active'), 4000);
+        }
+
+        function clock() {
+            const now = new Date();
+            const days = ["AHAD", "ISNIN", "SELASA", "RABU", "KHAMIS", "JUMAAT", "SABTU"];
+            const t = now.toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).split(' ');
+            document.getElementById('hud-day').innerText = days[now.getDay()];
+            document.getElementById('hud-time').innerText = t[0];
+            document.getElementById('hud-ampm').innerText = (t[1] || '').toUpperCase();
+        }
+        setInterval(clock, 1000); clock();
+
         function updateIsland(active, percent, status) {
-            const island = document.getElementById('dynamic-island');
-            const bar = document.getElementById('island-progress');
-            const txtPercent = document.getElementById('island-percent');
-            const txtStatus = document.getElementById('island-status');
-
+            const isl = document.getElementById('dynamic-island');
             if(active) {
-                island.classList.add('active');
-                bar.style.width = percent + '%';
-                txtPercent.innerText = percent + '%';
-                txtStatus.innerText = status;
+                isl.classList.add('active');
+                document.getElementById('isl-info').style.display = "block";
+                document.getElementById('isl-progress').style.width = percent + '%';
+                document.getElementById('isl-percent').innerText = percent + '%';
+                document.getElementById('isl-status').innerText = status.toUpperCase();
             } else {
-                setTimeout(() => {
-                    island.classList.remove('active');
-                }, 2000);
+                setTimeout(() => { isl.classList.remove('active'); document.getElementById('isl-info').style.display = "none"; }, 2500);
             }
         }
 
-        // --- AUTH ---
         async function initAuth() {
             const { data: { session } } = await _supabase.auth.getSession();
             if (session) handleIn(session.user);
             _supabase.auth.onAuthStateChange((_, s) => { if(s) handleIn(s.user); else handleOut(); });
-            if (window.location.hash) window.history.replaceState(null, null, window.location.pathname);
         }
 
         function handleIn(user) {
             currentUser = user;
             document.getElementById('login-btn').style.display = 'none';
             document.getElementById('logout-btn').style.display = 'block';
+            sendAI("WELCOME SHINOBI " + user.user_metadata.full_name + ". v1.38 ACTIVE.");
             fetchData();
         }
 
@@ -268,43 +324,32 @@
             currentCat = c;
             document.querySelectorAll('.pill').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
+            sendAI("ACCESS: " + c.toUpperCase());
         }
 
-        // --- REALTIME CLOCK ---
-        function clock() {
-            const now = new Date();
-            const days = ["AHAD", "ISNIN", "SELASA", "RABU", "KHAMIS", "JUMAAT", "SABTU"];
-            document.getElementById('day-now').innerText = days[now.getDay()];
-            document.getElementById('clock-now').innerText = now.toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true }).toUpperCase();
-        }
-        setInterval(clock, 1000); clock();
-
-        // --- UPLOAD LOGIC ---
         document.getElementById('f-input').onchange = async (e) => {
             const file = e.target.files[0];
             if (!file || !currentUser) return;
             try {
-                updateIsland(true, 10, "MEMBACA FAIL...");
+                updateIsland(true, 15, "ANALYZING");
+                sendAI("PROCESSING DATA GULUNGAN...");
                 let uploadFile = file;
                 let fileName = file.name;
-
                 if (fileName.toLowerCase().endsWith('.heic')) {
-                    updateIsland(true, 30, "CONVERTING HEIC...");
+                    updateIsland(true, 40, "CONVERTING");
                     const blob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.5 });
                     uploadFile = Array.isArray(blob) ? blob[0] : blob;
                     fileName = fileName.replace(/\.[^/.]+$/, ".jpg");
                 }
-
-                updateIsland(true, 60, "OPTIMIZING...");
+                updateIsland(true, 70, "RESIZING");
                 const base64 = await resizeImg(uploadFile);
-
-                updateIsland(true, 85, "UPLOADING...");
+                updateIsland(true, 90, "SUMMONING");
                 const { error } = await _supabase.from('uploads').insert([{ user_id: currentUser.id, category: currentCat, image_url: base64, file_name: fileName }]);
                 if (error) throw error;
-
-                updateIsland(true, 100, "SELESAI!");
+                updateIsland(true, 100, "SUCCESS");
+                sendAI("MISSION SUCCESS! DATA ARCHIVED.");
                 fetchData();
-            } catch (err) { updateIsland(true, 100, "ERROR!"); }
+            } catch (err) { updateIsland(true, 100, "FAILED"); sendAI("ERROR: SUMMON FAILED."); }
             finally { updateIsland(false, 0, ""); }
         };
 
@@ -319,7 +364,7 @@
                         if (w > 1000) { h *= 1000 / w; w = 1000; }
                         canvas.width = w; canvas.height = h;
                         canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                        resolve(canvas.toDataURL('image/jpeg', 0.6));
+                        resolve(canvas.toDataURL('image/jpeg', 0.65));
                     };
                     img.src = e.target.result;
                 };
@@ -334,22 +379,22 @@
             document.getElementById('stat-count').innerText = data.length;
             const grid = document.getElementById('data-grid');
             grid.innerHTML = data.map(item => `
-                <div class="item-card">
-                    <img src="${item.image_url}" class="item-img" onclick="view('${item.image_url}')">
-                    <div style="padding:5px; text-align:center;">
-                        <div style="color:var(--sky-blue); font-size:0.7rem;">${item.category}</div>
-                        <div style="font-size:1rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${item.file_name}</div>
-                        <button style="width:100%; color:red; border:none; background:none; cursor:pointer;" onclick="del('${item.id}')">PADAM</button>
+                <div class="card">
+                    <img src="${item.image_url}" class="card-img" onclick="viewImg('${item.image_url}')">
+                    <div style="text-align:center; margin-top:10px;">
+                        <div style="color:var(--primary); font-size:1.1rem; font-weight:bold;">${item.category}</div>
+                        <div style="font-size:0.9rem; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">${item.file_name}</div>
+                        <button style="width:100%; color:#ff3b30; border:none; background:none; cursor:pointer; font-size:1.1rem; margin-top:5px;" onclick="del('${item.id}')">ERASE</button>
                     </div>
                 </div>
             `).join('');
         }
 
         async function del(id) {
-            if (confirm("Padam data?")) { await _supabase.from('uploads').delete().match({ id, user_id: currentUser.id }); fetchData(); }
+            if (confirm("Erase permanently?")) { await _supabase.from('uploads').delete().match({ id, user_id: currentUser.id }); fetchData(); sendAI("DATA ERASED."); }
         }
 
-        function view(u) { document.getElementById('modal-img').src = u; document.getElementById('modal').style.display = 'flex'; }
+        function viewImg(u) { document.getElementById('modal-img').src = u; document.getElementById('modal').style.display = 'flex'; }
         initAuth();
     </script>
 </body>
