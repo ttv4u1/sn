@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHINOBI CLOUD | v25.0 MOBILE PRO</title>
+    <title>SHINOBI CLOUD | v26.0 PIXAR SECURE</title>
     
     <link id="dynamic-favicon" rel="icon" type="image/png" href="">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -20,8 +20,7 @@
             --p-green: #2ed573;
             --p-purple: #a55eea;
             --clay-white: #ffffff;
-            --toy-bg: #eef2f7;
-            --shadow-3d: 8px 8px 16px #c3cbd9, -8px -8px 16px #ffffff;
+            --shadow-3d: 10px 10px 20px #c3cbd9, -10px -10px 20px #ffffff;
             --inner-glow: inset 3px 3px 6px rgba(255,255,255,0.8), inset -3px -3px 6px rgba(0,0,0,0.05);
         }
 
@@ -29,161 +28,136 @@
 
         body { 
             background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); 
-            color: #2f3542; min-height: 100vh; overflow-x: hidden;
-            padding-top: 80px; /* Adjust for fixed header */
+            color: #2f3542; min-height: 100vh; overflow-x: hidden; padding-top: 85px;
         }
 
-        /* --- SMART RESPONSIVE HEADER --- */
+        /* --- STABLE HEADER --- */
         header {
-            margin: 0; padding: 10px 15px;
-            background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px);
-            border-bottom: 3px solid var(--p-blue);
-            display: flex; align-items: center; justify-content: space-between;
-            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            padding: 10px 15px; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(20px);
+            border-bottom: 4px solid var(--p-blue); display: flex; align-items: center; justify-content: space-between;
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
             transition: transform 0.4s ease;
         }
         header.hide { transform: translateY(-100%); }
 
-        .brand-3d h1 { font-size: 1.5rem; color: var(--p-blue); }
+        .brand h1 { font-size: 1.6rem; color: var(--p-blue); text-shadow: 1px 1px 0px #fff; }
 
-        .clock-container { text-align: center; flex: 1; }
-        #live-masa { font-family: 'JetBrains Mono', monospace !important; color: var(--p-red); font-size: 1.1rem; font-weight: bold; }
-        #live-hari { font-size: 0.6rem; opacity: 0.6; text-transform: uppercase; }
+        .clock-ui { text-align: center; flex: 1; }
+        #live-masa { font-family: 'JetBrains Mono', monospace !important; color: var(--p-red); font-size: 1.2rem; font-weight: bold; }
+        #live-hari { font-size: 0.65rem; opacity: 0.6; text-transform: uppercase; }
 
-        /* --- LOGIN & PROFILE COMPACT --- */
-        .auth-area { display: flex; align-items: center; gap: 8px; }
-        .login-btn-comp { background: #fff; border: 2px solid var(--p-blue); padding: 5px 12px; border-radius: 50px; font-size: 0.9rem; cursor: pointer; display: flex; align-items: center; gap: 5px; }
-        
+        /* --- REALISTIC LOGIN BUTTON --- */
+        .login-btn-3d {
+            background: #fff; border: 2.5px solid var(--p-blue); padding: 8px 18px; border-radius: 50px;
+            display: flex; align-items: center; gap: 10px; cursor: pointer; transition: 0.3s;
+            box-shadow: 4px 4px 0px var(--p-blue); font-size: 1rem; color: var(--p-blue);
+        }
+        .login-btn-3d:active { transform: translate(3px, 3px); box-shadow: none; }
+        .login-btn-3d img { width: 18px; }
+
+        /* --- PROFILE HUB --- */
         .profile-hub {
-            display: flex; align-items: center; background: #fff; border-radius: 50px;
-            padding: 3px; width: 42px; overflow: hidden; transition: 0.5s;
-            border: 2px solid var(--p-yellow); cursor: pointer;
+            display: none; align-items: center; background: #fff; border-radius: 50px;
+            padding: 4px; width: 50px; overflow: hidden; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid var(--p-yellow); cursor: pointer; box-shadow: var(--shadow-3d);
         }
-        .profile-hub.expanded { width: 180px; padding-right: 10px; }
-        .profile-pic { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1.5px solid #fff; flex-shrink: 0; }
-        .user-meta { opacity: 0; transition: 0.3s; margin-left: 8px; white-space: nowrap; overflow: hidden; font-family: 'Inter', sans-serif !important; letter-spacing: 0; font-size: 0.8rem; }
-        .profile-hub.expanded .user-meta { opacity: 1; }
+        .profile-hub.expanded { width: 200px; padding-right: 15px; }
+        .avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; flex-shrink: 0; background: #eee; }
+        .user-details { opacity: 0; transition: 0.3s; margin-left: 10px; white-space: nowrap; overflow: hidden; font-family: 'Inter', sans-serif !important; letter-spacing: 0; }
+        .profile-hub.expanded .user-details { opacity: 1; }
 
-        /* --- MAIN LAYOUT --- */
-        .main-container { padding: 15px; max-width: 1200px; margin: 0 auto; }
-        
-        /* --- CLAY CARDS --- */
+        /* --- LAYOUT --- */
+        .main-content { padding: 15px; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 350px 1fr; gap: 20px; }
+
         .clay-card { 
-            background: #fff; border-radius: 25px; padding: 20px; 
-            margin-bottom: 15px; border: 4px solid #fff; 
-            box-shadow: var(--shadow-3d); position: relative;
+            background: #fff; border-radius: 25px; padding: 20px; border: 4px solid #fff; 
+            box-shadow: var(--shadow-3d); margin-bottom: 20px;
         }
-        .section-title { font-size: 1.4rem; color: var(--p-blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
 
-        /* --- SYNC BUTTON --- */
-        .sync-btn {
-            width: 100%; padding: 15px; border-radius: 15px; border: none;
-            background: linear-gradient(to bottom, #3a91ff, #1e3799);
-            color: #fff; font-size: 1.5rem; cursor: pointer;
-            box-shadow: 0 6px 0 #0c2461; transition: 0.1s;
+        /* 1. SYNC CLOUD */
+        .sync-area { 
+            background: var(--p-blue); color: #fff; padding: 20px; border-radius: 20px;
+            text-align: center; cursor: pointer; box-shadow: 0 8px 0 #0c2461; transition: 0.1s;
         }
-        .sync-btn:active { transform: translateY(4px); box-shadow: none; }
+        .sync-area:active { transform: translateY(4px); box-shadow: none; }
 
-        /* --- CATEGORY SCROLL (IMPORTANT FOR MOBILE) --- */
-        .nav-scroller { 
-            display: flex; gap: 10px; overflow-x: auto; padding: 5px 5px 15px 5px; 
-            scrollbar-width: none; -webkit-overflow-scrolling: touch; 
-        }
-        .nav-scroller::-webkit-scrollbar { display: none; }
-        .nav-item { 
-            padding: 10px 20px; background: #fff; border-radius: 15px; 
-            font-size: 1.2rem; cursor: pointer; white-space: nowrap;
-            box-shadow: var(--shadow-3d); border: 2px solid transparent; transition: 0.3s;
-            display: flex; align-items: center; gap: 8px;
-        }
+        /* 2. PRAYER TIMES */
+        .p-item { display: flex; justify-content: space-between; padding: 10px; background: #f8fafc; border-radius: 12px; margin-bottom: 6px; box-shadow: var(--inner-glow); font-size: 1rem; }
+        .p-item.active { background: var(--p-purple); color: #fff; }
+
+        /* 3. UTILS */
+        .nav-scroll { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 15px; scrollbar-width: none; }
+        .nav-item { padding: 12px 25px; background: #fff; border-radius: 15px; white-space: nowrap; cursor: pointer; box-shadow: var(--shadow-3d); border: 2px solid transparent; }
         .nav-item.active { background: var(--p-yellow); border-color: #fff; transform: translateY(-3px); }
 
-        /* --- PRAYER TIMES LIST --- */
-        .prayer-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 8px; }
-        .p-row { padding: 10px; background: #f8fafc; border-radius: 12px; text-align: center; box-shadow: var(--inner-glow); }
-        .p-row span { display: block; font-size: 0.7rem; opacity: 0.6; }
-        .p-row b { display: block; font-size: 0.9rem; color: var(--p-blue); }
-        .p-row.next { background: var(--p-purple); color: #fff; }
-        .p-row.next b { color: #fff; }
+        /* DATA GRID */
+        .grid-data { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+        .data-card { background: #fff; border-radius: 20px; padding: 10px; border: 3px solid #fff; box-shadow: var(--shadow-3d); position: relative; }
+        .data-card img { width: 100%; height: 160px; object-fit: cover; border-radius: 15px; cursor: pointer; }
 
-        /* --- DATA GRID --- */
-        .grid-data { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; margin-top: 10px; }
-        .data-card { background: #fff; border-radius: 20px; padding: 8px; border: 3px solid #fff; box-shadow: var(--shadow-3d); }
-        .data-card img { width: 100%; height: 140px; object-fit: cover; border-radius: 15px; cursor: pointer; }
-
-        /* --- UTILS --- */
-        .btn-q { padding: 8px; border-radius: 10px; border: none; color: #fff; font-size: 0.9rem; cursor: pointer; width: 100%; }
-
-        @media (min-width: 768px) {
-            .main-container { display: grid; grid-template-columns: 350px 1fr; gap: 20px; padding-top: 30px; }
-            .brand-3d h1 { font-size: 2.2rem; }
-            .prayer-list { grid-template-columns: 1fr; }
-            .p-row { display: flex; justify-content: space-between; text-align: left; }
-            .p-row span { font-size: 1.1rem; }
-            .p-row b { font-size: 1.1rem; }
-            .grid-data { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); }
+        /* MOBILE FIX */
+        @media (max-width: 1024px) {
+            .main-content { grid-template-columns: 1fr; }
+            header { padding: 10px; }
+            .brand h1 { font-size: 1.2rem; }
+            .grid-data { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
         }
     </style>
 </head>
 <body>
 
     <header id="main-header">
-        <div class="brand-3d">
-            <h1>SHINOBI CLOUD</h1>
-        </div>
-
-        <div class="clock-container">
+        <div class="brand"><h1>SHINOBI CLOUD</h1></div>
+        <div class="clock-ui">
             <div id="live-masa">00:00:00</div>
             <div id="live-hari">...</div>
         </div>
-
         <div class="auth-area">
-            <button id="login-btn" class="login-btn-comp" onclick="login()">
-                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="16"> LOGIN
+            <button id="login-btn" class="login-btn-3d" onclick="login()">
+                <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png"> LOGIN
             </button>
-            
             <div id="profile-hub" class="profile-hub" onclick="toggleProfile()">
-                <img id="u-img" class="profile-pic" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==">
-                <div class="user-meta">
-                    <div id="u-name" style="font-weight: bold; line-height: 1;">USER NAME</div>
+                <img id="u-img" class="avatar" src="">
+                <div class="user-details">
+                    <div id="u-name" style="font-weight: bold; line-height: 1;">USER</div>
                     <button style="background:none; border:none; color:red; font-size: 0.7rem; cursor:pointer;" onclick="logout()">LOGOUT</button>
                 </div>
             </div>
         </div>
     </header>
 
-    <div class="main-container">
-        <!-- CONTROLS -->
+    <div class="main-content">
+        <!-- SIDEBAR -->
         <aside>
             <div class="clay-card">
-                <div class="section-title">📤 MUAT NAIK</div>
-                <button class="sync-btn" onclick="document.getElementById('f-input').click()">✦ SYNC CLOUD <span id="p-val"></span></button>
+                <div style="font-size:0.9rem; color:var(--p-blue); margin-bottom:8px;">1. SYNC DATA</div>
+                <div class="sync-area" onclick="document.getElementById('f-input').click()">
+                    <span style="font-size:1.6rem;">✦ SYNC CLOUD <span id="p-val"></span></span>
+                </div>
                 <input type="file" id="f-input" hidden accept="image/*,.heic">
-                
                 <label style="display:flex; justify-content:space-between; margin-top:15px; align-items:center; cursor:pointer;">
                     <span style="font-size:1.1rem; color:var(--p-purple);">🤖 AI BUANG BG</span>
-                    <input type="checkbox" id="ai-toggle" style="width:22px; height:22px;">
+                    <input type="checkbox" id="ai-toggle" style="width:20px; height:20px;">
                 </label>
             </div>
 
             <div class="clay-card">
-                <div class="section-title">🕌 WAKTU SOLAT</div>
-                <div id="prayer-list" class="prayer-list">
-                    <div class="p-row"><span>Subuh</span> <b id="p-subuh">-</b></div>
-                    <div class="p-row"><span>Zohor</span> <b id="p-zohor">-</b></div>
-                    <div class="p-row"><span>Asar</span> <b id="p-asar">-</b></div>
-                    <div class="p-row"><span>Maghrib</span> <b id="p-maghrib">-</b></div>
-                    <div class="p-row"><span>Isyak</span> <b id="p-isyak">-</b></div>
+                <div style="font-size:0.9rem; color:var(--p-purple); margin-bottom:8px;">2. WAKTU SOLAT</div>
+                <div id="p-list">
+                    <div class="p-item"><span>Subuh</span> <b id="p-subuh">-</b></div>
+                    <div class="p-item"><span>Zohor</span> <b id="p-zohor">-</b></div>
+                    <div class="p-item"><span>Asar</span> <b id="p-asar">-</b></div>
+                    <div class="p-item"><span>Maghrib</span> <b id="p-maghrib">-</b></div>
+                    <div class="p-item"><span>Isyak</span> <b id="p-isyak">-</b></div>
                 </div>
             </div>
 
             <div class="clay-card">
-                <div class="section-title">📖 AL-QURAN</div>
-                <select id="surah-list" style="width:100%; padding:8px; border-radius:10px; margin-bottom:8px; font-size: 1rem; border:2px solid #eee;"></select>
+                <div style="font-size:0.9rem; color:var(--p-green); margin-bottom:8px;">3. UTILITIES</div>
+                <select id="surah-list" style="width:100%; padding:8px; border-radius:10px; border:2px solid #eee; margin-bottom:8px;"></select>
                 <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                    <button class="btn-q" style="background:var(--p-green);" onclick="toggleAudio()" id="btn-play">PLAY</button>
-                    <button class="btn-q" style="background:var(--p-red);" onclick="stopAudio()">STOP</button>
+                    <button style="background:var(--p-green); color:#fff; border:none; padding:8px; border-radius:10px; cursor:pointer;" onclick="toggleAudio()" id="btn-play">PLAY</button>
+                    <button style="background:var(--p-red); color:#fff; border:none; padding:8px; border-radius:10px; cursor:pointer;" onclick="stopAudio()">STOP</button>
                 </div>
                 <audio id="audio-quran"></audio>
             </div>
@@ -191,56 +165,86 @@
 
         <!-- DATA -->
         <main>
-            <div class="nav-scroller">
-                <div class="nav-item active" onclick="setCat('Resit', this)">📜 RESIT DATA</div>
+            <div class="nav-scroll">
+                <div class="nav-item active" onclick="setCat('Resit', this)">📜 RESIT</div>
                 <div class="nav-item" onclick="setCat('Logistik', this)">🚛 LOGISTIK</div>
                 <div class="nav-item" onclick="setCat('Minyak', this)">⛽ MINYAK</div>
                 <div class="nav-item" style="color:var(--p-purple)" onclick="setCat('Global', this)">🌎 GLOBAL</div>
             </div>
 
             <div id="data-grid" class="grid-data">
-                <!-- Data will load here -->
+                <!-- Records list -->
             </div>
         </main>
     </div>
 
     <div id="modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10001; display:none; align-items:center; justify-content:center; padding:20px;" onclick="this.style.display='none'">
-        <img id="modal-img" style="max-width:100%; max-height:80vh; border:6px solid #fff; border-radius:20px; box-shadow:0 20px 40px rgba(0,0,0,0.5);">
+        <img id="modal-img" style="max-width:100%; max-height:85vh; border:6px solid #fff; border-radius:20px;">
     </div>
 
     <script>
+        // --- CONFIG ---
         const SUPABASE_URL = 'https://wacziigqqdmfhkrycdrf.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhY3ppaWdxcWRtZmhrcnljZHJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzczNTIsImV4cCI6MjA5Mjk1MzM1Mn0.TD39LvuYkM8IZF6YUDNo-LYtfIFMPrxniy_cnHnHu8A';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         let currentUser = null, currentCat = "Resit", lastScroll = 0;
 
-        // --- AUTH ---
+        // --- STABLE LOGIN LOGIC ---
         async function initAuth() {
+            // Cek sesi sedia ada semasa page load
             const { data: { session } } = await _supabase.auth.getSession();
             if (session) handleIn(session.user);
-            _supabase.auth.onAuthStateChange((ev, s) => {
-                if (ev === 'SIGNED_IN' && s) handleIn(s.user);
-                if (ev === 'SIGNED_OUT') handleOut();
+
+            // Dengar perubahan status auth (Login/Logout)
+            _supabase.auth.onAuthStateChange((event, session) => {
+                if (event === 'SIGNED_IN' && session) {
+                    handleIn(session.user);
+                } else if (event === 'SIGNED_OUT') {
+                    handleOut();
+                }
             });
         }
-        function login() { _supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } }); }
-        async function logout() { await _supabase.auth.signOut(); location.reload(); }
-        function handleIn(u) {
-            currentUser = u; document.getElementById('login-btn').style.display='none';
-            document.getElementById('profile-hub').style.display='flex';
-            document.getElementById('u-name').innerText = u.user_metadata.full_name;
-            document.getElementById('u-img').src = u.user_metadata.avatar_url;
+
+        function login() {
+            _supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: {
+                    redirectTo: window.location.origin + window.location.pathname,
+                    queryParams: { prompt: 'select_account' }
+                }
+            });
+        }
+
+        async function logout() {
+            await _supabase.auth.signOut();
+            window.location.reload();
+        }
+
+        function handleIn(user) {
+            currentUser = user;
+            document.getElementById('login-btn').style.display = 'none';
+            const hub = document.getElementById('profile-hub');
+            hub.style.display = 'flex';
+            document.getElementById('u-name').innerText = user.user_metadata.full_name || "Active User";
+            document.getElementById('u-img').src = user.user_metadata.avatar_url || "";
             fetchData();
         }
-        function handleOut() { currentUser = null; document.getElementById('login-btn').style.display='flex'; document.getElementById('profile-hub').style.display='none'; }
 
-        // --- UI ---
+        function handleOut() {
+            currentUser = null;
+            document.getElementById('login-btn').style.display = 'flex';
+            document.getElementById('profile-hub').style.display = 'none';
+            document.getElementById('data-grid').innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; font-size:1.2rem; opacity:0.5;">SILA LOGIN UNTUK AKSES DATA</div>';
+        }
+
+        // --- UI & UTILS ---
         function toggleProfile() { document.getElementById('profile-hub').classList.toggle('expanded'); }
+        
         window.addEventListener('scroll', () => {
             const h = document.getElementById('main-header');
             const cur = window.pageYOffset;
-            if (cur > lastScroll && cur > 60) h.classList.add('hide');
+            if (cur > lastScroll && cur > 80) h.classList.add('hide');
             else h.classList.remove('hide');
             lastScroll = cur;
         });
@@ -253,16 +257,17 @@
         }
         setInterval(updateClock, 1000);
 
-        // --- PRAYER & QURAN ---
         async function fetchPrayer() {
-            const res = await fetch("https://api.azanpro.com/times/today.json?zone=sgr01&format=12");
-            const data = await res.json();
-            const d = data.results;
-            document.getElementById('p-subuh').innerText = d.fajr;
-            document.getElementById('p-zohor').innerText = d.dhuhr;
-            document.getElementById('p-asar').innerText = d.asr;
-            document.getElementById('p-maghrib').innerText = d.maghrib;
-            document.getElementById('p-isyak').innerText = d.isha;
+            try {
+                const res = await fetch("https://api.azanpro.com/times/today.json?zone=sgr01&format=12");
+                const data = await res.json();
+                const d = data.results;
+                document.getElementById('p-subuh').innerText = d.fajr;
+                document.getElementById('p-zohor').innerText = d.dhuhr;
+                document.getElementById('p-asar').innerText = d.asr;
+                document.getElementById('p-maghrib').innerText = d.maghrib;
+                document.getElementById('p-isyak').innerText = d.isha;
+            } catch(e) {}
         }
 
         async function fetchQuran() {
@@ -277,7 +282,7 @@
         }
         function stopAudio() { const a = document.getElementById('audio-quran'); a.pause(); a.currentTime = 0; document.getElementById('btn-play').innerText = "PLAY"; }
 
-        // --- DATA ---
+        // --- DATA HANDLER ---
         document.getElementById('f-input').onchange = async (e) => {
             const file = e.target.files[0]; if (!file || !currentUser) return;
             document.getElementById('p-val').innerText = "...";
@@ -297,28 +302,31 @@
                     img.src = ev.target.result;
                 };
                 reader.readAsDataURL(upFile);
-            } catch (err) { alert("Error"); }
+            } catch (err) { alert("Muat naik gagal."); }
         };
 
         async function fetchData() {
             if (!currentUser) return;
             const q = currentCat === 'Global' ? _supabase.from('uploads').select('*').eq('is_public', true) : _supabase.from('uploads').select('*').eq('user_id', currentUser.id).eq('category', currentCat);
             const { data } = await q.order('created_at', { ascending: false });
-            document.getElementById('data-grid').innerHTML = (data || []).map(item => `
+            const grid = document.getElementById('data-grid');
+            if (!data || data.length === 0) { grid.innerHTML = '<div style="grid-column:1/-1; text-align:center; padding:40px; opacity:0.5;">TIADA DATA DITEMUI</div>'; return; }
+            grid.innerHTML = data.map(item => `
                 <div class="data-card">
                     <img src="${item.image_url}" onclick="showModal('${item.image_url}')">
                     <div style="margin-top:8px; display:flex; gap:5px;">
-                        <button style="flex:1; background:var(--p-blue); color:#fff; border:none; padding:6px; border-radius:8px; font-size:0.8rem;" onclick="showModal('${item.image_url}')">LIHAT</button>
-                        ${item.user_id === currentUser.id ? `<button style="background:var(--p-red); color:#fff; border:none; padding:6px; border-radius:8px; font-size:0.8rem;" onclick="del('${item.id}')">PADAM</button>` : ''}
+                        <button style="flex:1; background:var(--p-blue); color:#fff; border:none; padding:8px; border-radius:10px; font-size:0.8rem; cursor:pointer;" onclick="window.open('${item.image_url}')">OPEN</button>
+                        ${item.user_id === currentUser.id ? `<button style="background:var(--p-red); color:#fff; border:none; padding:8px; border-radius:10px; font-size:0.8rem; cursor:pointer;" onclick="del('${item.id}')">DEL</button>` : ''}
                     </div>
                 </div>
             `).join('');
         }
 
         function showModal(u) { document.getElementById('modal-img').src = u; document.getElementById('modal').style.display = 'flex'; }
-        function del(id) { if(confirm("Padam?")) _supabase.from('uploads').delete().match({id}).then(() => fetchData()); }
+        function del(id) { if(confirm("Padam fail?")) _supabase.from('uploads').delete().match({id}).then(() => fetchData()); }
         function setCat(c, btn) { currentCat = c; document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); btn.classList.add('active'); fetchData(); }
 
+        // Start
         initAuth(); updateClock(); fetchPrayer(); fetchQuran();
     </script>
 </body>
