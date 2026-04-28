@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ANIME DASHBOARD | SISTEM PANGKALAN DATA</title>
+    <title>ANIME DASHBOARD | SHINOBI DATA v1.1.0</title>
     
-    <!-- Google Fonts: Bebas Neue -->
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    <!-- Google Fonts: Bebas Neue & Rajdhani -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
     
     <!-- Supabase JS Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -17,7 +17,7 @@
             --accent: #ffb700; /* Orange Gold */
             --white: #ffffff;
             --bg-dark: #0a0a0c;
-            --glass: rgba(255, 255, 255, 0.1);
+            --glass: rgba(255, 255, 255, 0.05);
             --glow-red: 0 0 15px rgba(255, 45, 85, 0.8);
             --glow-gold: 0 0 20px rgba(255, 183, 0, 0.6);
         }
@@ -46,39 +46,22 @@
             height: 100%;
             z-index: -1;
             background: linear-gradient(45deg, #1a0005, #000000, #0d001a);
-            overflow: hidden;
         }
 
-        /* Placeholder for Anime Action Video/Gif Background */
         .anime-overlay {
             position: absolute;
             width: 100%;
             height: 100%;
             background: url('https://images.unsplash.com/photo-1578632292335-df3abbb0d586?auto=format&fit=crop&q=80&w=1920') no-repeat center center;
             background-size: cover;
-            opacity: 0.2;
+            opacity: 0.15;
             filter: saturate(1.5) blur(2px);
             animation: pulseBg 10s infinite alternate;
         }
 
         @keyframes pulseBg {
             0% { transform: scale(1); }
-            100% { transform: scale(1.1); }
-        }
-
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(circle, var(--primary) 1px, transparent 1px);
-            background-size: 50px 50px;
-            opacity: 0.1;
-            animation: moveParticles 20s linear infinite;
-        }
-
-        @keyframes moveParticles {
-            from { transform: translateY(0); }
-            to { transform: translateY(-1000px); }
+            100% { transform: scale(1.05); }
         }
 
         /* --- HEADER --- */
@@ -86,243 +69,179 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: var(--glass);
+            background: rgba(10, 10, 12, 0.8);
             backdrop-filter: blur(15px);
             border-bottom: 2px solid var(--primary);
             padding: 1rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: var(--glow-red);
         }
 
-        .logo {
-            font-size: 2rem;
-            color: var(--primary);
-            text-shadow: var(--glow-red);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+        .logo { font-size: 2rem; color: var(--primary); text-shadow: var(--glow-red); }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            gap: 2rem;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-size: 1.2rem;
-            position: relative;
-            transition: 0.3s;
-        }
-
-        nav a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--accent);
-            transition: 0.3s;
-            box-shadow: var(--glow-gold);
-        }
-
-        nav a:hover::after { width: 100%; }
-        nav a:hover { color: var(--accent); text-shadow: var(--glow-gold); }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            height: 70vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .hero h1 {
-            font-size: 6rem;
-            text-transform: uppercase;
-            background: linear-gradient(to bottom, #fff, var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 20px var(--primary));
-            animation: titleFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes titleFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
+        /* --- AUTH & UI --- */
+        .auth-container { display: flex; gap: 10px; }
         .btn-aura {
-            padding: 15px 40px;
-            font-size: 1.5rem;
+            padding: 10px 25px;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 4px;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
             transition: 0.3s;
+            font-size: 1.1rem;
             box-shadow: var(--glow-red);
-            margin-top: 20px;
         }
+        .btn-aura:hover { transform: scale(1.05); box-shadow: 0 0 25px var(--primary); }
+        .btn-secondary { background: #333; box-shadow: none; }
+        .hidden { display: none !important; }
 
-        .btn-aura:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px var(--primary), 0 0 60px var(--accent);
-        }
-
-        .btn-aura::before {
-            content: '';
-            position: absolute;
-            top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
-            animation: auraRotate 4s linear infinite;
-        }
-
-        @keyframes auraRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* --- DASHBOARD & STORAGE --- */
+        /* --- MAIN LAYOUT --- */
         .main-container {
-            padding: 50px 5%;
+            padding: 30px 5%;
             display: grid;
-            grid-template-columns: 300px 1fr;
+            grid-template-columns: 320px 1fr;
             gap: 30px;
         }
 
         .side-panel {
             background: var(--glass);
-            border: 1px solid var(--primary);
-            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 25px;
             border-radius: 15px;
             height: fit-content;
+            position: sticky;
+            top: 100px;
         }
 
         .clock-box {
             text-align: center;
             padding: 20px;
             border: 2px solid var(--accent);
-            border-radius: 10px;
-            background: rgba(0,0,0,0.5);
-            margin-bottom: 20px;
-            box-shadow: inset 0 0 15px var(--accent);
+            background: rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+            clip-path: polygon(0 15%, 15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
         }
 
-        #clock-time { font-size: 3rem; color: var(--accent); line-height: 1; }
-        #clock-date { font-size: 1.2rem; color: #ccc; }
+        #clock-time { font-size: 3.5rem; color: var(--accent); }
 
-        .stat-bar {
-            margin: 15px 0;
+        .stat-card {
+            background: rgba(255, 45, 85, 0.1);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
         }
 
-        .progress-bg {
-            width: 100%;
-            height: 10px;
-            background: #333;
-            border-radius: 5px;
-            overflow: hidden;
-            margin-top: 5px;
-        }
+        .stat-card h4 { font-family: 'Rajdhani', sans-serif; font-size: 0.9rem; color: #aaa; }
+        .stat-card div { font-size: 1.8rem; color: #fff; }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            width: 75%;
-            box-shadow: 0 0 10px var(--primary);
-            animation: energyFill 2s ease-out;
-        }
+        /* --- UPLOAD & DATA --- */
+        .upload-section { background: var(--glass); padding: 30px; border-radius: 15px; }
 
-        /* --- UPLOAD SYSTEM --- */
-        .upload-section {
-            background: var(--glass);
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .upload-grid {
+        .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 30px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 25px;
         }
 
-        .category-card {
-            background: rgba(255,255,255,0.05);
+        .cat-btn {
+            background: #1a1a1a;
             border: 1px solid var(--primary);
-            padding: 20px;
-            text-align: center;
+            color: white;
+            padding: 15px;
             cursor: pointer;
             transition: 0.3s;
         }
 
-        .category-card:hover {
+        .cat-btn.active {
             background: var(--primary);
-            transform: translateY(-5px);
             box-shadow: var(--glow-red);
         }
 
         .drop-zone {
-            border: 2px dashed var(--accent);
+            border: 2px dashed #444;
             padding: 40px;
             text-align: center;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
             transition: 0.3s;
+            cursor: pointer;
         }
 
-        .drop-zone:hover { background: rgba(255, 183, 0, 0.1); }
+        .drop-zone:hover { border-color: var(--accent); background: rgba(255,183,0,0.05); }
+
+        /* --- DATA GRID --- */
+        .filter-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
 
         .data-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
             gap: 20px;
         }
 
         .item-card {
-            background: var(--glass);
-            border: 1px solid var(--primary);
+            background: #111;
+            border: 1px solid #222;
             padding: 10px;
-            border-radius: 10px;
-            position: relative;
-            overflow: hidden;
+            border-radius: 8px;
             transition: 0.3s;
+            animation: fadeIn 0.5s ease forwards;
         }
+        @keyframes fadeIn { from { opacity:0; transform: translateY(10px); } to { opacity:1; transform: translateY(0); } }
 
-        .item-card:hover {
-            transform: scale(1.05);
-            border-color: var(--accent);
-            box-shadow: var(--glow-gold);
-        }
+        .item-card:hover { border-color: var(--primary); transform: translateY(-5px); }
 
-        .item-card img {
+        .img-container {
             width: 100%;
-            height: 150px;
-            object-fit: cover;
+            height: 180px;
+            overflow: hidden;
             border-radius: 5px;
+            cursor: zoom-in;
+            position: relative;
         }
 
-        .delete-btn {
-            background: var(--primary);
-            border: none;
+        .img-container img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .img-container:hover img { transform: scale(1.1); }
+
+        .card-info { padding: 12px 5px; font-family: 'Rajdhani', sans-serif; }
+        .card-category { color: var(--accent); font-size: 0.8rem; text-transform: uppercase; }
+        .card-date { color: #666; font-size: 0.75rem; }
+
+        .actions { display: flex; gap: 5px; margin-top: 10px; }
+        .btn-sm { flex: 1; padding: 8px; font-size: 0.8rem; border: none; cursor: pointer; color: white; }
+        .btn-view { background: #333; }
+        .btn-del { background: #500; }
+        .btn-del:hover { background: #ff2d55; }
+
+        /* --- LIGHTBOX MODAL --- */
+        #modal-overlay {
+            position: fixed;
+            top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        #modal-img { max-width: 90%; max-height: 85vh; border: 3px solid var(--white); box-shadow: 0 0 30px rgba(0,0,0,0.5); }
+
+        .close-modal {
+            position: absolute;
+            top: 20px; right: 30px;
+            font-size: 3rem;
             color: white;
-            padding: 5px 10px;
-            width: 100%;
-            margin-top: 10px;
             cursor: pointer;
-            clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
         }
 
         /* --- VERSION BOX --- */
@@ -335,137 +254,92 @@
             border-radius: 20px;
             font-size: 0.8rem;
             box-shadow: var(--glow-red);
-            animation: floating 3s infinite ease-in-out;
-            cursor: help;
+            z-index: 100;
         }
-
-        @keyframes floating {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        footer {
-            padding: 40px;
-            text-align: center;
-            border-top: 1px solid var(--glass);
-            margin-top: 50px;
-        }
-
-        .glowing-line {
-            height: 2px;
-            width: 100%;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            margin-bottom: 20px;
-        }
-
-        /* Auth UI */
-        .auth-container {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            z-index: 2000;
-        }
-
-        .hidden { display: none; }
 
         @media (max-width: 768px) {
             .main-container { grid-template-columns: 1fr; }
-            .hero h1 { font-size: 3.5rem; }
-            nav ul { display: none; }
+            .category-grid { grid-template-columns: repeat(2, 1fr); }
+            header { padding: 1rem 2%; }
         }
     </style>
 </head>
 <body>
 
-    <div class="animated-bg">
-        <div class="anime-overlay"></div>
-        <div class="particles"></div>
-    </div>
+    <div class="animated-bg"><div class="anime-overlay"></div></div>
 
-    <div class="auth-container">
-        <button id="login-btn" class="btn-aura" style="font-size: 1rem; padding: 10px 20px;">LOG MASUK GOOGLE</button>
-        <button id="logout-btn" class="btn-aura hidden" style="font-size: 1rem; padding: 10px 20px;">LOG KELUAR</button>
+    <!-- Modal View -->
+    <div id="modal-overlay" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <img id="modal-img" src="" alt="Full View">
+        <div id="modal-caption" style="position:absolute; bottom:30px; color:var(--accent); font-size:1.5rem;"></div>
     </div>
 
     <header>
-        <div class="logo">
-            <span style="color: var(--accent);">✦</span> SHINOBI DATA
+        <div class="logo">✦ SHINOBI <span style="color:var(--white)">DATA</span></div>
+        <div class="auth-container">
+            <button id="login-btn" class="btn-aura">LOG MASUK GOOGLE</button>
+            <button id="logout-btn" class="btn-aura btn-secondary hidden">KELUAR</button>
         </div>
-        <nav>
-            <ul>
-                <li><a href="#">UTAMA</a></li>
-                <li><a href="#">MUAT NAIK</a></li>
-                <li><a href="#">PANGKALAN</a></li>
-                <li><a href="#">PANEL</a></li>
-                <li><a href="#">TETAPAN</a></li>
-            </ul>
-        </nav>
     </header>
-
-    <section class="hero">
-        <h1 data-text="SYSTEM ACTIVE">SISTEM AKTIF</h1>
-        <p style="letter-spacing: 5px; color: var(--accent);">PENGURUSAN DATA ANIME GENERASI BARU</p>
-        <button class="btn-aura" onclick="document.getElementById('upload-area').scrollIntoView({behavior: 'smooth'})">MULAKAN MUAT NAIK</button>
-    </section>
 
     <div class="main-container">
         <aside class="side-panel">
             <div class="clock-box">
-                <div id="clock-day">ISNIN</div>
-                <div id="clock-time">00:00:00</div>
-                <div id="clock-date">01 JANUARI 2024</div>
+                <div id="clock-time">00:00</div>
+                <div id="clock-date" style="font-size: 1rem; opacity: 0.7;">-- --- ----</div>
             </div>
 
-            <h3 style="color: var(--primary); margin-bottom: 15px;">STATISTIK PANEL</h3>
-            <div class="stat-bar">
-                <span>JUMLAH MUAT NAIK</span>
-                <div class="progress-bg"><div class="progress-fill" style="width: 85%;"></div></div>
+            <h3 style="color: var(--primary); margin-bottom: 15px;">DASHBOARD STATS</h3>
+            <div class="stat-card">
+                <h4>JUMLAH REKOD</h4>
+                <div id="stat-total">0</div>
             </div>
-            <div class="stat-bar">
-                <span>KAD MINYAK</span>
-                <div class="progress-bg"><div class="progress-fill" style="width: 40%; background: var(--accent);"></div></div>
+            <div class="stat-card">
+                <h4>BULAN INI</h4>
+                <div id="stat-month">0</div>
             </div>
-            <div class="stat-bar">
-                <span>ODOMETER</span>
-                <div class="progress-bg"><div class="progress-fill" style="width: 60%;"></div></div>
+            <div class="stat-card" style="border-color: var(--accent);">
+                <h4>KATEGORI AKTIF</h4>
+                <div id="stat-cat" style="font-size: 1.2rem;">TIADA DATA</div>
             </div>
         </aside>
 
-        <main class="upload-section" id="upload-area">
-            <h2 style="margin-bottom: 20px; border-left: 5px solid var(--primary); padding-left: 15px;">KATEGORI MUAT NAIK</h2>
-            
-            <div class="upload-grid">
-                <div class="category-card" onclick="selectCategory('Resit')">RESIT</div>
-                <div class="category-card" onclick="selectCategory('Kad Minyak')">KAD MINYAK</div>
-                <div class="category-card" onclick="selectCategory('Kad TNG')">KAD TNG</div>
-                <div class="category-card" onclick="selectCategory('Odometer')">ODOMETER</div>
+        <main class="upload-section">
+            <h2 style="margin-bottom: 20px; color: var(--primary);">KATEGORI MUAT NAIK</h2>
+            <div class="category-grid">
+                <button class="cat-btn active" onclick="setCategory('Resit', this)">RESIT</button>
+                <button class="cat-btn" onclick="setCategory('Kad Minyak', this)">KAD MINYAK</button>
+                <button class="cat-btn" onclick="setCategory('Kad TNG', this)">KAD TNG</button>
+                <button class="cat-btn" onclick="setCategory('Odometer', this)">ODOMETER</button>
             </div>
 
-            <div class="drop-zone" id="drop-zone">
-                <p id="selected-label">SILA PILIH KATEGORI & SERET GAMBAR KE SINI</p>
+            <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+                <p id="upload-status" style="font-size: 1.2rem;">KLIK ATAU SERET GAMBAR UNTUK <span style="color:var(--primary)">MUAT NAIK</span></p>
                 <input type="file" id="file-input" hidden accept="image/*">
-                <button class="btn-aura" style="margin-top: 10px; padding: 5px 20px;" onclick="document.getElementById('file-input').click()">PILIH FAIL</button>
             </div>
 
-            <h2 style="margin-bottom: 20px; border-left: 5px solid var(--accent); padding-left: 15px;">DATA TERSIMPAN</h2>
+            <div class="filter-bar">
+                <h2 style="color: var(--accent);">PANGKALAN DATA</h2>
+                <select id="filter-select" onchange="fetchData()" style="background:#111; color:white; border:1px solid #444; padding:5px 15px;">
+                    <option value="Semua">SEMUA DATA</option>
+                    <option value="Resit">RESIT SAHAJA</option>
+                    <option value="Kad Minyak">KAD MINYAK</option>
+                    <option value="Kad TNG">KAD TNG</option>
+                    <option value="Odometer">ODOMETER</option>
+                </select>
+            </div>
+
             <div class="data-grid" id="data-grid">
-                <!-- Cards dynamically added here -->
+                <!-- Data will load here -->
             </div>
         </main>
     </div>
 
-    <div class="version-box">
-        VERSION v1.0.0-STABLE
-    </div>
-
-    <footer>
-        <div class="glowing-line"></div>
-        <p>© 2024 SHINOBI DATA SYSTEM | REKAAN SENI KOMIK CINEMATIC</p>
-    </footer>
+    <div class="version-box">VERSION v1.1.0-KAI</div>
 
     <script>
         // --- CONFIGURASI SUPABASE ---
-        // Sila masukkan URL dan Key anda sendiri
         const SUPABASE_URL = 'https://wacziigqqdmfhkrycdrf.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhY3ppaWdxcWRtZmhrcnljZHJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzczNTIsImV4cCI6MjA5Mjk1MzM1Mn0.TD39LvuYkM8IZF6YUDNo-LYtfIFMPrxniy_cnHnHu8A';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -473,130 +347,108 @@
         let currentUser = null;
         let currentCategory = "Resit";
 
-        // --- 2. SISTEM JAM (CLOCK) ---
+        // --- CLOCK SYSTEM ---
         function updateClock() {
             const now = new Date();
-            const days = ['AHAD', 'ISNIN', 'SELASA', 'RABU', 'KHAMIS', 'JUMAAT', 'SABTU'];
-            const months = ['JANUARI', 'FEBRUARI', 'MAC', 'APRIL', 'MEI', 'JUN', 'JULAI', 'OGOS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DISEMBER'];
-            
-            if(document.getElementById('clock-day')) {
-                document.getElementById('clock-day').innerText = days[now.getDay()];
-                document.getElementById('clock-time').innerText = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                document.getElementById('clock-date').innerText = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
-            }
+            document.getElementById('clock-time').innerText = now.toLocaleTimeString('ms-MY', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false });
+            document.getElementById('clock-date').innerText = now.toLocaleDateString('ms-MY', { day:'numeric', month:'long', year:'numeric' }).toUpperCase();
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- 3. AUTHENTICATION (GOOGLE LOGIN) ---
+        // --- AUTH SYSTEM ---
         const loginBtn = document.getElementById('login-btn');
         const logoutBtn = document.getElementById('logout-btn');
 
-        loginBtn.addEventListener('click', async () => {
-            const { error } = await _supabase.auth.signInWithOAuth({
-                provider: 'google',
-                options: { redirectTo: window.location.href }
-            });
-            if (error) alert("Ralat Login: " + error.message);
-        });
+        loginBtn.onclick = () => _supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } });
+        logoutBtn.onclick = () => { _supabase.auth.signOut(); window.location.reload(); };
 
-        logoutBtn.addEventListener('click', async () => {
-            await _supabase.auth.signOut();
-            window.location.reload();
-        });
-
-        // Pantau status login secara real-time
         _supabase.auth.onAuthStateChange((event, session) => {
             if (session) {
                 currentUser = session.user;
                 loginBtn.classList.add('hidden');
                 logoutBtn.classList.remove('hidden');
-                fetchData(); // Ambil data dari database bila dah login
+                fetchData();
             } else {
                 currentUser = null;
                 loginBtn.classList.remove('hidden');
                 logoutBtn.classList.add('hidden');
-                document.getElementById('data-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; opacity:0.5;">SILA LOG MASUK UNTUK LIHAT DATA</p>';
+                document.getElementById('data-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; opacity:0.5;">SILA LOG MASUK UNTUK AKSES DATA</p>';
             }
         });
 
-        // --- 4. DATABASE LOGIC (UPLOAD & FETCH) ---
-        function selectCategory(cat) {
+        // --- DATABASE LOGIC ---
+        function setCategory(cat, btn) {
             currentCategory = cat;
-            document.getElementById('selected-label').innerText = `KATEGORI: ${cat.toUpperCase()} (SIAP UNTUK MUAT NAIK)`;
-            // Efek visual pada border category
-            document.querySelectorAll('.category-card').forEach(c => {
-                c.style.borderColor = 'var(--primary)';
-                if(c.innerText === cat.toUpperCase()) c.style.borderColor = 'var(--accent)';
-            });
+            document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
-        const fileInput = document.getElementById('file-input');
-        fileInput.addEventListener('change', (e) => {
+        document.getElementById('file-input').onchange = (e) => {
             const file = e.target.files[0];
             if (file) handleUpload(file);
-        });
+        };
 
         async function handleUpload(file) {
-            if (!currentUser) {
-                alert("Sila log masuk Google terlebih dahulu!");
-                return;
-            }
-
-            // Tunjukkan loading sederhana
-            document.getElementById('selected-label').innerText = "SEDANG MEMUAT NAIK... SILA TUNGGU.";
+            if (!currentUser) return alert("Sila log masuk dahulu!");
+            
+            document.getElementById('upload-status').innerHTML = "SEDANG MEMPROSES <span style='color:var(--accent)'>MUAT NAIK...</span>";
 
             const reader = new FileReader();
-            reader.onload = async function(e) {
-                const base64Image = e.target.result;
+            reader.onload = async (e) => {
+                const { error } = await _supabase.from('uploads').insert([
+                    { user_id: currentUser.id, category: currentCategory, image_url: e.target.result }
+                ]);
 
-                // Masukkan data ke table 'uploads' di Supabase
-                const { error } = await _supabase
-                    .from('uploads')
-                    .insert([
-                        { 
-                            user_id: currentUser.id, 
-                            category: currentCategory, 
-                            image_url: base64Image 
-                        }
-                    ]);
-
-                if (error) {
-                    alert('Ralat Simpan Database: ' + error.message);
-                } else {
-                    alert('Data berjaya disimpan ke Cloud!');
-                    fetchData(); // Refresh senarai
+                if (error) alert("Ralat: " + error.message);
+                else {
+                    document.getElementById('upload-status').innerHTML = "BERJAYA! <span style='color:var(--accent)'>DATA DISIMPAN.</span>";
+                    setTimeout(() => document.getElementById('upload-status').innerHTML = "KLIK ATAU SERET GAMBAR UNTUK <span style='color:var(--primary)'>MUAT NAIK</span>", 2000);
+                    fetchData();
                 }
-                document.getElementById('selected-label').innerText = "MUAT NAIK BERJAYA! PILIH KATEGORI LAIN?";
             };
             reader.readAsDataURL(file);
         }
 
         async function fetchData() {
             if (!currentUser) return;
+            const filter = document.getElementById('filter-select').value;
+            
+            let query = _supabase.from('uploads').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+            
+            if (filter !== "Semua") query = query.eq('category', filter);
 
-            const { data, error } = await _supabase
-                .from('uploads')
-                .select('*')
-                .order('created_at', { ascending: false });
+            const { data, error } = await query;
+            if (error) return console.error(error);
 
-            if (error) {
-                console.error('Ralat Ambil Data:', error.message);
+            renderGrid(data);
+            updateStats(data);
+        }
+
+        function renderGrid(data) {
+            const grid = document.getElementById('data-grid');
+            grid.innerHTML = '';
+
+            if (data.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; opacity:0.5;">TIADA REKOD DIJUMPA</p>';
                 return;
             }
 
-            const grid = document.getElementById('data-grid');
-            grid.innerHTML = '';
-            
             data.forEach(item => {
+                const dateStr = new Date(item.created_at).toLocaleString('ms-MY');
                 const card = document.createElement('div');
                 card.className = 'item-card';
                 card.innerHTML = `
-                    <img src="${item.image_url}" alt="upload">
-                    <div style="padding:10px;">
-                        <small style="color:var(--accent); display:block; margin-bottom:5px;">${item.category}</small>
-                        <p style="font-size:0.7rem; opacity:0.7;">DIMUAT NAIK PADA: ${new Date(item.created_at).toLocaleDateString()}</p>
-                        <button class="delete-btn" onclick="deleteItem('${item.id}')">PADAM DATA</button>
+                    <div class="img-container" onclick="openModal('${item.image_url}', '${item.category}')">
+                        <img src="${item.image_url}" loading="lazy">
+                    </div>
+                    <div class="card-info">
+                        <div class="card-category">${item.category}</div>
+                        <div class="card-date">${dateStr}</div>
+                        <div class="actions">
+                            <button class="btn-sm btn-view" onclick="openModal('${item.image_url}', '${item.category}')">LIHAT</button>
+                            <button class="btn-sm btn-del" onclick="deleteItem('${item.id}')">PADAM</button>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -604,43 +456,59 @@
         }
 
         async function deleteItem(id) {
-            if (!confirm("Adakah anda pasti mahu memadam data ini dari pangkalan data?")) return;
+            if (!confirm("Padam data ini secara kekal?")) return;
+            const { error } = await _supabase.from('uploads').delete().eq('id', id);
+            if (error) alert("Gagal padam!");
+            else fetchData();
+        }
 
-            const { error } = await _supabase
-                .from('uploads')
-                .delete()
-                .eq('id', id);
+        // --- STATS SYSTEM ---
+        function updateStats(data) {
+            document.getElementById('stat-total').innerText = data.length;
+            
+            const thisMonth = new Date().getMonth();
+            const monthlyData = data.filter(d => new Date(d.created_at).getMonth() === thisMonth);
+            document.getElementById('stat-month').innerText = monthlyData.length;
 
-            if (error) {
-                alert("Gagal padam: " + error.message);
-            } else {
-                fetchData();
+            if (data.length > 0) {
+                const counts = {};
+                data.forEach(d => counts[d.category] = (counts[d.category] || 0) + 1);
+                const topCat = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+                document.getElementById('stat-cat').innerText = topCat.toUpperCase();
             }
         }
 
-        // --- 5. EXTRA: MOUSE TRAIL EFFECT ---
+        // --- MODAL / LIGHTBOX SYSTEM ---
+        function openModal(url, cat) {
+            const modal = document.getElementById('modal-overlay');
+            const modalImg = document.getElementById('modal-img');
+            const caption = document.getElementById('modal-caption');
+            
+            modalImg.src = url;
+            caption.innerText = cat.toUpperCase();
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Lock scroll
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // --- MOUSE EFFECT ---
         document.addEventListener('mousemove', (e) => {
             const trail = document.createElement('div');
-            trail.style.position = 'fixed';
-            trail.style.width = '4px';
-            trail.style.height = '4px';
-            trail.style.background = 'var(--primary)';
-            trail.style.borderRadius = '50%';
-            trail.style.pointerEvents = 'none';
-            trail.style.left = e.clientX + 'px';
-            trail.style.top = e.clientY + 'px';
-            trail.style.boxShadow = '0 0 8px var(--primary)';
-            trail.style.zIndex = '9999';
+            trail.style.cssText = `position:fixed; width:4px; height:4px; background:var(--primary); 
+                                  border-radius:50%; pointer-events:none; left:${e.clientX}px; 
+                                  top:${e.clientY}px; box-shadow:0 0 10px var(--primary); z-index:9999;`;
             document.body.appendChild(trail);
-
             setTimeout(() => {
-                trail.style.transition = '0.6s';
+                trail.style.transition = '0.5s';
                 trail.style.opacity = '0';
-                trail.style.transform = 'scale(3)';
-                setTimeout(() => trail.remove(), 600);
+                trail.style.transform = 'scale(2)';
+                setTimeout(() => trail.remove(), 500);
             }, 50);
         });
-
     </script>
 </body>
 </html>
