@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SHINOBI DATA | ENTERPRISE ADAPTIVE</title>
+    <title>SHINOBI CLOUD | v22.0 PIXAR 3D PRO</title>
     
     <link id="dynamic-favicon" rel="icon" type="image/png" href="">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -14,210 +14,201 @@
 
     <style>
         :root {
-            --corp-navy: #0f172a;
-            --corp-blue: #0284c7;
-            --corp-slate: #f8fafc;
-            --corp-border: #e2e8f0;
-            --text-main: #1e293b;
-            --success: #10b981;
-            --danger: #ef4444;
-            --gold: #d97706;
+            --p-blue: #3a91ff;
+            --p-yellow: #ffd000;
+            --p-red: #ff4757;
+            --p-green: #2ed573;
+            --p-purple: #a55eea;
+            --clay-white: #ffffff;
+            --toy-bg: #eef2f7;
+            --shadow-3d: 12px 12px 25px #c3cbd9, -12px -12px 25px #ffffff;
+            --inner-glow: inset 4px 4px 8px rgba(255,255,255,0.8), inset -4px -4px 8px rgba(0,0,0,0.05);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Bebas Neue', cursive !important; letter-spacing: 1.5px; }
 
-        h1, h2, h3, button, .bebas { font-family: 'Bebas Neue', cursive !important; letter-spacing: 1.2px; }
+        body { 
+            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); 
+            color: #2f3542; min-height: 100vh; overflow-x: hidden;
+            padding-top: 100px;
+        }
 
-        body { background: var(--corp-slate); color: var(--text-main); min-height: 100vh; line-height: 1.5; overflow-x: hidden; }
+        /* --- 3D PIXAR ICON STYLE --- */
+        .icon-3d { filter: drop-shadow(3px 5px 2px rgba(0,0,0,0.1)); transition: 0.3s; display: inline-block; vertical-align: middle; margin-right: 10px; }
+        .nav-item:hover .icon-3d { transform: scale(1.2) rotate(10deg); }
 
-        /* --- RESPONSIVE HEADER --- */
+        /* --- AUTO-HIDE HEADER --- */
         header {
-            background: #fff; border-bottom: 2px solid var(--corp-navy); padding: 10px 4%;
+            margin: 0 2%; padding: 10px 25px;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px);
+            border-radius: 40px; border: 4px solid #fff;
             display: flex; align-items: center; justify-content: space-between;
-            position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            position: fixed; top: 15px; left: 0; right: 0; z-index: 1000;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            transition: top 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .brand-container { display: flex; align-items: center; gap: 10px; }
-        .brand-container h1 { font-size: 1.8rem; color: var(--corp-navy); }
-        
-        .header-tools { display: flex; align-items: center; gap: 15px; }
+        .brand-3d h1 { font-size: 2.2rem; color: var(--p-blue); text-shadow: 2px 2px 0px #fff; }
 
-        .clock-corp { 
-            background: var(--corp-slate); padding: 5px 12px; border-radius: 8px; border: 1px solid var(--corp-border);
-            display: flex; flex-direction: column; align-items: flex-end;
-        }
-        #live-masa { font-family: 'JetBrains Mono', monospace !important; font-weight: bold; font-size: 1.1rem; color: var(--corp-blue); }
-        #live-hari { font-size: 0.7rem; font-weight: 700; color: #64748b; text-transform: uppercase; }
-
-        /* --- PROFILE HUD (AUTOHIDE) --- */
+        /* --- USER PROFILE (PIXAR STYLE FULL) --- */
         .profile-hub {
             display: flex; align-items: center; background: #fff; border-radius: 50px;
-            padding: 3px; width: 42px; overflow: hidden; transition: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border: 1px solid var(--corp-border); cursor: pointer;
+            padding: 5px; width: 55px; overflow: hidden; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid var(--p-yellow); cursor: pointer; box-shadow: var(--shadow-3d);
         }
-        .profile-hub.expanded { width: 180px; padding-right: 12px; border-color: var(--corp-blue); }
-        .avatar { width: 34px; height: 34px; background: var(--corp-navy); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
-        .user-info { opacity: 0; transition: 0.3s; margin-left: 10px; white-space: nowrap; overflow: hidden; }
-        .profile-hub.expanded .user-info { opacity: 1; }
+        .profile-hub:hover { width: 320px; padding-right: 20px; }
+        .profile-pic { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; border: 2px solid #fff; box-shadow: var(--inner-glow); flex-shrink: 0; }
+        .user-full-details { opacity: 0; transition: 0.3s; margin-left: 15px; white-space: nowrap; overflow: hidden; font-family: 'Inter', sans-serif !important; letter-spacing: 0; }
+        .profile-hub:hover .user-full-details { opacity: 1; }
 
         /* --- LAYOUT GRID --- */
-        .main-container {
-            display: grid; grid-template-columns: 320px 1fr;
-            gap: 20px; padding: 20px 4%; max-width: 1600px; margin: 0 auto;
-        }
-
-        /* --- CARDS & PANELS --- */
-        .corp-card { background: #fff; border: 1px solid var(--corp-border); border-radius: 12px; padding: 15px; margin-bottom: 20px; }
-        .util-header { font-family: 'Bebas Neue' !important; font-size: 1.4rem; color: var(--corp-navy); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-
-        /* NO 1. SYNC */
-        .sync-box { background: var(--corp-blue); color: #fff; border-radius: 10px; padding: 20px; text-align: center; cursor: pointer; transition: 0.3s; }
-        .sync-box:hover { background: var(--corp-navy); transform: translateY(-2px); }
-        .sync-box h2 { font-size: 1.8rem; }
-        .progress-bar { height: 6px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-top: 10px; overflow: hidden; display: none; }
-        .progress-fill { height: 100%; background: #fff; width: 0%; transition: 0.3s; }
-
-        /* NO 2. PRAYER */
-        .prayer-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--corp-slate); font-size: 1.1rem; }
-        .prayer-item.active { color: var(--corp-blue); font-weight: bold; border-left: 3px solid var(--corp-blue); padding-left: 8px; }
-
-        /* NO 3. UTILS */
-        .btn-util { width: 100%; padding: 10px; border: none; border-radius: 8px; margin-top: 8px; cursor: pointer; font-size: 1.2rem; }
-
-        /* --- CATEGORY TABS (MOBILE FRIENDLY SCROLL) --- */
-        .nav-wrapper { margin-bottom: 20px; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-        .nav-wrapper::-webkit-scrollbar { display: none; }
-        .tab-btn {
-            display: inline-block; padding: 10px 25px; background: #fff; border: 1px solid var(--corp-border);
-            border-radius: 8px; margin-right: 8px; cursor: pointer; font-size: 1.3rem; transition: 0.2s;
-        }
-        .tab-btn.active { background: var(--corp-navy); color: #fff; border-color: var(--corp-navy); }
-
-        /* --- DATA GRID --- */
-        .grid-data { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
-        .data-card { background: #fff; border: 1px solid var(--corp-border); border-radius: 10px; padding: 10px; transition: 0.2s; }
-        .data-card:hover { box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
-        .data-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 6px; cursor: zoom-in; }
+        .main-container { display: grid; grid-template-columns: 350px 1fr; gap: 25px; padding: 20px 3% 80px 3%; }
         
-        .card-footer { display: flex; gap: 5px; margin-top: 10px; }
-        .btn-card { flex: 1; padding: 6px; border-radius: 6px; border: 1px solid var(--corp-border); background: #fff; cursor: pointer; font-size: 0.9rem; font-weight: bold; }
-
-        /* --- RESPONSIVE BREAKPOINTS --- */
-        @media (max-width: 1024px) {
-            .main-container { grid-template-columns: 1fr; padding: 10px; }
-            .brand-container h1 { font-size: 1.4rem; }
-            header { padding: 8px 15px; }
-            .clock-corp { display: none; } /* Hide clock on small mobile to save space */
+        .clay-card { 
+            background: #fff; border-radius: 40px; padding: 25px; 
+            margin-bottom: 25px; border: 5px solid #fff; 
+            box-shadow: var(--shadow-3d); position: relative;
         }
 
-        @media (min-width: 1025px) {
-            .clock-corp { display: flex; }
-        }
+        .section-title { font-size: 1.8rem; color: var(--p-blue); margin-bottom: 15px; border-bottom: 2px solid #f1f1f1; padding-bottom: 5px; display: flex; align-items: center; }
 
-        /* PRINT */
-        @media print { body * { visibility: hidden; } #modal-img { visibility: visible; position: fixed; left: 0; top: 0; width: 100%; } }
+        /* --- SYNC & BUTTONS --- */
+        .sync-btn {
+            width: 100%; padding: 20px; border-radius: 25px; border: none;
+            background: linear-gradient(to bottom, #3a91ff, #1e3799);
+            color: #fff; font-size: 2rem; cursor: pointer;
+            box-shadow: 0 10px 0 #0c2461, 0 15px 30px rgba(0,0,0,0.2);
+            transition: 0.1s;
+        }
+        .sync-btn:active { transform: translateY(8px); box-shadow: none; }
+
+        /* --- DATA DISPLAY --- */
+        .tab-scroller { display: flex; gap: 15px; overflow-x: auto; padding: 10px 0 20px 0; scrollbar-width: none; }
+        .nav-item { 
+            padding: 12px 30px; background: #fff; border-radius: 25px; 
+            font-size: 1.6rem; cursor: pointer; white-space: nowrap;
+            box-shadow: var(--shadow-3d); border: 3px solid transparent; transition: 0.3s;
+        }
+        .nav-item.active { background: var(--p-yellow); border-color: #fff; transform: translateY(-5px); }
+
+        .grid-data { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
+        .data-card { background: #fff; border-radius: 35px; padding: 15px; border: 5px solid #fff; box-shadow: var(--shadow-3d); transition: 0.3s; }
+        .data-card:hover { transform: rotate(-2deg) scale(1.02); }
+        .data-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 25px; box-shadow: var(--inner-glow); }
+
+        /* --- OFFICE 365 3D ICONS --- */
+        .export-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 15px; }
+        .export-btn { padding: 10px; border-radius: 15px; border: none; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 0 rgba(0,0,0,0.1); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .export-btn span { font-size: 0.7rem; margin-top: 3px; color: #fff; }
+        .bg-w { background: #2b579a; } .bg-x { background: #217346; } .bg-p { background: #d24726; } .bg-pr { background: #333; }
+
+        /* --- UTILITIES --- */
+        .p-row { display: flex; justify-content: space-between; padding: 12px 18px; background: #f8fafc; border-radius: 18px; margin-bottom: 8px; font-size: 1.3rem; box-shadow: var(--inner-glow); }
+        .p-row.next { background: var(--p-purple); color: #fff; }
+
+        @media (max-width: 1024px) { .main-container { grid-template-columns: 1fr; } header { width: 96%; } }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="brand-container">
-            <h1>SHINOBI CLOUD</h1>
-            <span class="bebas" style="background:#000; color:#fff; padding: 2px 8px; border-radius: 4px; font-size: 0.8rem;">V19.0</span>
+    <header id="main-header">
+        <div class="brand-3d">
+            <h1><span class="icon-3d">☁️</span>SHINOBI CLOUD</h1>
         </div>
 
-        <div class="header-tools">
-            <div class="clock-corp">
-                <div id="live-masa">00:00:00</div>
-                <div id="live-hari">...</div>
-            </div>
+        <div style="text-align: center;">
+            <div id="live-masa" style="color: var(--p-red); font-size: 1.6rem; font-weight: bold; font-family: 'JetBrains Mono', monospace !important;">00:00:00</div>
+            <div id="live-hari" style="font-size: 0.8rem; opacity: 0.6;">...</div>
+        </div>
 
-            <button id="login-btn" class="bebas" style="background:var(--corp-navy); color:#fff; border:none; padding:8px 15px; border-radius:6px; cursor:pointer; font-size:1.1rem;" onclick="login()">LOG MASUK</button>
-            
-            <div id="profile-hub" class="profile-hub" onclick="toggleProfile()">
-                <div class="avatar" id="avatar-initial">?</div>
-                <div class="user-info">
-                    <div id="user-name" style="font-size: 0.9rem; font-weight: 600;">USER</div>
-                    <button style="background:none; border:none; color:var(--danger); font-size: 0.7rem; cursor:pointer;" onclick="logout()">LOGOUT</button>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button id="login-btn" style="background:var(--p-blue); color:#fff; border:4px solid #fff; padding:12px 25px; border-radius:50px; cursor:pointer; box-shadow: var(--shadow-3d);" onclick="login()">LOGIN SYSTEM</button>
+            <div id="profile-hub" class="profile-hub">
+                <img id="u-img" class="profile-pic" src="https://via.placeholder.com/150">
+                <div class="user-full-details">
+                    <div id="u-name" style="font-size: 1.2rem; font-weight: bold; line-height: 1;">NAMA PENGGUNA</div>
+                    <div id="u-email" style="font-size: 0.7rem; opacity: 0.7;">email@corporate.com</div>
+                    <button style="background:none; border:none; color:red; font-size: 0.8rem; cursor:pointer; margin-top:5px;" onclick="logout()">DISCONNECT SYSTEM</button>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="main-container">
-        <!-- SIDEBAR CONTROLS -->
+        <!-- SIDEBAR -->
         <aside>
-            <!-- 1. SYNC CLOUD -->
-            <div class="corp-card" style="border-top: 4px solid var(--corp-blue);">
-                <div class="util-header">1. SYNCHRONIZATION</div>
-                <div class="sync-box" onclick="document.getElementById('f-input').click()">
-                    <h2 class="bebas">✦ SYNC CLOUD <span id="percent-val"></span></h2>
-                </div>
-                <div class="progress-bar" id="progress-container"><div class="progress-fill" id="progress-fill"></div></div>
-            </div>
-
-            <!-- 2. WAKTU SOLAT -->
-            <div class="corp-card">
-                <div class="util-header">2. PRAYER TIMES</div>
-                <div class="prayer-list">
-                    <div class="prayer-item"><span>Subuh</span> <span id="p-fajr">-</span></div>
-                    <div class="prayer-item"><span>Zohor</span> <span id="p-dhuhr">-</span></div>
-                    <div class="prayer-item"><span>Asar</span> <span id="p-asr">-</span></div>
-                    <div class="prayer-item"><span>Maghrib</span> <span id="p-maghrib">-</span></div>
-                    <div class="prayer-item"><span>Isyak</span> <span id="p-isha">-</span></div>
-                </div>
-            </div>
-
-            <!-- 3. UTILITIES -->
-            <div class="corp-card">
-                <div class="util-header">3. UTILITIES</div>
-                <div style="display:flex; justify-content:space-between; align-items:center; background:var(--corp-slate); padding:10px; border-radius:8px;">
-                    <div style="font-size:0.8rem; font-weight:bold;">STEPS: <span id="display-steps" style="color:var(--success)">0</span></div>
-                    <button class="bebas" style="padding:4px 10px; background:var(--corp-navy); color:#fff; border:none; border-radius:4px; font-size:0.9rem;" onclick="toggleGPS()">GPS</button>
-                </div>
+            <div class="clay-card">
+                <div class="section-title"><span class="icon-3d">📤</span>MUAT NAIK</div>
+                <button class="sync-btn" onclick="document.getElementById('f-input').click()">✦ SYNC CLOUD <span id="p-val"></span></button>
+                <input type="file" id="f-input" hidden accept="image/*,.heic">
                 
-                <select id="surah-list" style="width:100%; margin-top:10px; padding:8px; border:1px solid var(--corp-border); border-radius:6px; font-size:0.9rem;"></select>
-                <button class="bebas btn-util" style="background:var(--success); color:#fff;" onclick="toggleAudio()">MAIN AL-QURAN</button>
+                <div style="display:flex; justify-content:space-between; margin-top:20px;">
+                    <div class="bebas" style="font-size:1.2rem;">🤖 AI REMOVE BG</div>
+                    <input type="checkbox" id="ai-toggle" style="width:25px; height:25px; cursor:pointer;">
+                </div>
+            </div>
+
+            <div class="clay-card">
+                <div class="section-title"><span class="icon-3d">🕌</span>WAKTU SOLAT</div>
+                <div id="prayer-list">
+                    <div class="p-row"><span>Subuh</span> <span id="p-subuh">-</span></div>
+                    <div class="p-row"><span>Zohor</span> <span id="p-zohor">-</span></div>
+                    <div class="p-row"><span>Asar</span> <span id="p-asar">-</span></div>
+                    <div class="p-row"><span>Maghrib</span> <span id="p-maghrib">-</span></div>
+                    <div class="p-row"><span>Isyak</span> <span id="p-isyak">-</span></div>
+                </div>
+            </div>
+
+            <div class="clay-card">
+                <div class="section-title"><span class="icon-3d">📖</span>AL-QURAN</div>
+                <select id="surah-list" style="width:100%; padding:12px; border-radius:15px; border:2px solid #eee; margin-bottom:10px; font-size: 1.2rem;"></select>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <button style="background:var(--p-green); color:#fff; padding:10px; border:none; border-radius:15px; cursor:pointer;" onclick="toggleAudio()" id="btn-play">PLAY</button>
+                    <button style="background:var(--p-red); color:#fff; padding:10px; border:none; border-radius:15px; cursor:pointer;" onclick="stopAudio()">STOP</button>
+                </div>
                 <audio id="audio-quran"></audio>
+            </div>
+
+            <div class="clay-card" style="text-align: center;">
+                <div class="section-title"><span class="icon-3d">👟</span>GPS TRACKER</div>
+                <div id="display-steps" style="font-size: 4rem; color: var(--p-green); line-height: 1;">0</div>
+                <div style="font-family: 'Inter', sans-serif !important; font-size: 0.8rem; font-weight: bold;">LANGKAH DIREKOD</div>
+                <button style="width:100%; padding:12px; background:var(--p-blue); color:#fff; border:none; border-radius:15px; margin-top:15px; cursor:pointer;" onclick="toggleGPS()" id="gps-btn">AKTIFKAN GPS</button>
             </div>
         </aside>
 
-        <!-- MAIN DATA DISPLAY -->
+        <!-- MAIN -->
         <main>
-            <div class="nav-wrapper">
-                <div class="tab-btn bebas active" onclick="setCat('Resit', this)">📜 RECEIPTS</div>
-                <div class="tab-btn bebas" onclick="setCat('Logistik', this)">🚛 LOGISTICS</div>
-                <div class="tab-btn bebas" onclick="setCat('Minyak', this)">⛽ FUEL</div>
-                <div class="tab-btn bebas" style="color:var(--gold)" onclick="setCat('Global', this)">🌎 COMMUNITY</div>
+            <div class="tab-scroller">
+                <div class="nav-item active" onclick="setCat('Resit', this)"><span class="icon-3d">📜</span>RESIT</div>
+                <div class="nav-item" onclick="setCat('Logistik', this)"><span class="icon-3d">🚛</span>LOGISTIK</div>
+                <div class="nav-item" onclick="setCat('Minyak', this)"><span class="icon-3d">⛽</span>MINYAK</div>
+                <div class="nav-item" style="color:var(--p-purple)" onclick="setCat('Global', this)"><span class="icon-3d">🌎</span>COMMUNITY</div>
             </div>
 
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-bottom: 20px;">
-                <label class="corp-card" style="margin:0; padding:10px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
-                    <span class="bebas" style="font-size:1.1rem;">🤖 AI REMOVE BG</span>
-                    <input type="checkbox" id="ai-toggle">
-                </label>
-                <label class="corp-card" style="margin:0; padding:10px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
-                    <span class="bebas" style="font-size:1.1rem;">🌎 GLOBAL SHARE</span>
-                    <input type="checkbox" id="share-toggle">
-                </label>
-            </div>
-
-            <input type="file" id="f-input" hidden accept="image/*,.heic">
             <div id="data-grid" class="grid-data"></div>
         </main>
     </div>
 
-    <div id="modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; display:none; align-items:center; justify-content:center;" onclick="this.style.display='none'"><img id="modal-img" style="max-width:95%; max-height:90vh; border-radius:8px;"></div>
+    <div id="modal" style="position:fixed; inset:0; background:rgba(0,0,0,0.9); z-index:10000; display:none; align-items:center; justify-content:center;" onclick="this.style.display='none'"><img id="modal-img" style="max-width:90%; border:10px solid #fff; border-radius:40px;"></div>
 
     <script>
         const SUPABASE_URL = 'https://wacziigqqdmfhkrycdrf.supabase.co';
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhY3ppaWdxcWRtZmhrcnljZHJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzczNTIsImV4cCI6MjA5Mjk1MzM1Mn0.TD39LvuYkM8IZF6YUDNo-LYtfIFMPrxniy_cnHnHu8A';
         const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        let currentUser = null, currentCat = "Resit", totalDist = 0, lastCoords = null, watchId = null;
+        let currentUser = null, currentCat = "Resit", lastScroll = 0, watchId = null, totalDist = 0, lastCoords = null;
 
-        function toggleProfile() { document.getElementById('profile-hub').classList.toggle('expanded'); }
+        // --- AUTO-HIDE HEADER ---
+        window.addEventListener('scroll', () => {
+            const h = document.getElementById('main-header');
+            const cur = window.pageYOffset;
+            if (cur > lastScroll && cur > 100) h.style.top = "-150px";
+            else h.style.top = "15px";
+            lastScroll = cur;
+        });
 
+        // --- CORE CLOCK ---
         function updateClock() {
             const now = new Date();
             const hari = ["AHAD", "ISNIN", "SELASA", "RABU", "KHAMIS", "JUMAAT", "SABTU"];
@@ -226,45 +217,69 @@
         }
         setInterval(updateClock, 1000);
 
-        function updateProg(v) {
-            const bar = document.getElementById('progress-fill');
-            const cont = document.getElementById('progress-container');
-            const txt = document.getElementById('percent-val');
-            cont.style.display = 'block'; bar.style.width = v + '%'; txt.innerText = `(${v}%)`;
-            if(v >= 100) setTimeout(() => { cont.style.display = 'none'; txt.innerText = ''; }, 2000);
+        // --- QURAN ---
+        async function fetchQuran() {
+            const res = await fetch("https://api.alquran.cloud/v1/surah");
+            const data = await res.json();
+            document.getElementById('surah-list').innerHTML = data.data.map(s => `<option value="${s.number}">${s.number}. ${s.englishName}</option>`).join('');
         }
+        function toggleAudio() {
+            const audio = document.getElementById('audio-quran');
+            if (audio.paused) {
+                audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${document.getElementById('surah-list').value}.mp3`;
+                audio.play(); document.getElementById('btn-play').innerText = "PAUSE";
+            } else { audio.pause(); document.getElementById('btn-play').innerText = "PLAY"; }
+        }
+        function stopAudio() { const a = document.getElementById('audio-quran'); a.pause(); a.currentTime = 0; document.getElementById('btn-play').innerText = "PLAY"; }
+
+        // --- OFFICE EXPORT (SIMULATION) ---
+        function exportOffice(u, type) {
+            const name = `DOC_${Date.now()}`;
+            if(type === 'word') alert("Eksport ke Word 365 dimulakan...");
+            if(type === 'excel') alert("Eksport ke Excel 365 dimulakan...");
+            window.open(u);
+        }
+
+        // --- AUTH & DATA ---
+        async function initAuth() {
+            const { data: { session } } = await _supabase.auth.getSession();
+            if (session) handleIn(session.user);
+            _supabase.auth.onAuthStateChange((_, s) => { if(s) handleIn(s.user); else handleOut(); });
+        }
+
+        function handleIn(user) { 
+            currentUser = user; 
+            document.getElementById('login-btn').style.display='none';
+            document.getElementById('profile-hub').style.display='flex';
+            document.getElementById('u-name').innerText = user.user_metadata.full_name;
+            document.getElementById('u-email').innerText = user.email;
+            document.getElementById('u-img').src = user.user_metadata.avatar_url || 'https://via.placeholder.com/150';
+            fetchData(); 
+        }
+        function handleOut() { currentUser = null; document.getElementById('login-btn').style.display='block'; document.getElementById('profile-hub').style.display='none'; }
+        function login() { _supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } }); }
+        function logout() { _supabase.auth.signOut(); }
 
         document.getElementById('f-input').onchange = async (e) => {
             const file = e.target.files[0]; if (!file || !currentUser) return;
+            document.getElementById('p-val').innerText = "...";
             try {
-                updateProg(20);
                 let upFile = file;
-                if (file.name.toLowerCase().endsWith('.heic')) {
-                    const blob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.6 });
-                    upFile = blob[0] || blob;
-                }
-                updateProg(50);
-                if (document.getElementById('ai-toggle').checked) {
-                    upFile = await imglyRemoveBackground(upFile);
-                }
+                if (document.getElementById('ai-toggle').checked) upFile = await imglyRemoveBackground(file);
                 const reader = new FileReader();
                 reader.onload = async (ev) => {
                     const img = new Image();
                     img.onload = async () => {
                         const canvas = document.createElement('canvas');
-                        canvas.width = 1000; canvas.height = (1000 / img.width) * img.height;
+                        canvas.width = 1000; canvas.height = (1000/img.width)*img.height;
                         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
-                        await _supabase.from('uploads').insert([{ 
-                            user_id: currentUser.id, category: currentCat, 
-                            image_url: canvas.toDataURL('image/png', 0.7), file_name: file.name,
-                            is_public: document.getElementById('share-toggle').checked
-                        }]);
-                        updateProg(100); fetchData();
+                        await _supabase.from('uploads').insert([{ user_id: currentUser.id, category: currentCat, image_url: canvas.toDataURL('image/png', 0.7), file_name: file.name }]);
+                        document.getElementById('p-val').innerText = "OK"; fetchData();
                     };
                     img.src = ev.target.result;
                 };
                 reader.readAsDataURL(upFile);
-            } catch (err) { alert("Ralat."); updateProg(0); }
+            } catch (err) { alert("Error"); }
         };
 
         async function fetchData() {
@@ -273,54 +288,37 @@
             const { data } = await q.order('created_at', { ascending: false });
             document.getElementById('data-grid').innerHTML = data.map(item => `
                 <div class="data-card">
-                    <img src="${item.image_url}" onclick="viewImg('${item.image_url}')">
-                    <div class="card-footer">
-                        <button class="btn-card" onclick="printImg('${item.image_url}')">PRINT</button>
-                        ${item.user_id === currentUser.id ? `<button class="btn-card" style="color:red" onclick="del('${item.id}')">DEL</button>` : ''}
+                    <img src="${item.image_url}" onclick="window.open('${item.image_url}')">
+                    <div class="export-bar">
+                        <button class="export-btn bg-w" onclick="exportOffice('${item.image_url}','word')"><span>DOC</span></button>
+                        <button class="export-btn bg-x" onclick="exportOffice('${item.image_url}','excel')"><span>XLS</span></button>
+                        <button class="export-btn bg-p" onclick="window.open('${item.image_url}')"><span>VIEW</span></button>
+                        <button class="export-btn bg-pr" onclick="window.print()"><span>PRN</span></button>
                     </div>
+                    ${item.user_id === currentUser.id ? `<button style="width:100%; background:var(--p-red); color:#fff; border:none; border-radius:15px; margin-top:10px; padding:10px;" onclick="del('${item.id}')">HAPUS</button>` : ''}
                 </div>
             `).join('');
         }
-
-        async function initAuth() {
-            const { data: { session } } = await _supabase.auth.getSession();
-            if (session) handleIn(session.user);
-            _supabase.auth.onAuthStateChange((_, s) => { if(s) handleIn(s.user); else handleOut(); });
-        }
-        function handleIn(user) { currentUser = user; document.getElementById('login-btn').style.display='none'; document.getElementById('profile-hub').style.display='flex'; document.getElementById('user-name').innerText = user.user_metadata.full_name; document.getElementById('avatar-initial').innerText = user.user_metadata.full_name[0]; fetchData(); }
-        function handleOut() { currentUser = null; document.getElementById('login-btn').style.display='block'; document.getElementById('profile-hub').style.display='none'; }
-        function login() { _supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } }); }
-        function logout() { _supabase.auth.signOut(); }
-        function printImg(u) { viewImg(u); setTimeout(() => window.print(), 500); }
-        function del(id) { if(confirm("Hapus?")) { _supabase.from('uploads').delete().match({id}).then(() => fetchData()); } }
-        function setCat(c, btn) { currentCat = c; document.querySelectorAll('.tab-btn').forEach(i => i.classList.remove('active')); btn.classList.add('active'); fetchData(); }
-        function viewImg(u) { document.getElementById('modal-img').src = u; document.getElementById('modal').style.display = 'flex'; }
 
         async function fetchPrayer() {
             const res = await fetch("https://api.azanpro.com/times/today.json?zone=sgr01&format=12");
             const data = await res.json();
             const d = data.results;
-            document.getElementById('p-fajr').innerText = d.fajr;
-            document.getElementById('p-dhuhr').innerText = d.dhuhr;
-            document.getElementById('p-asr').innerText = d.asr;
+            document.getElementById('p-subuh').innerText = d.fajr;
+            document.getElementById('p-zohor').innerText = d.dhuhr;
+            document.getElementById('p-asar').innerText = d.asr;
             document.getElementById('p-maghrib').innerText = d.maghrib;
-            document.getElementById('p-isha').innerText = d.isha;
+            document.getElementById('p-isyak').innerText = d.isha;
         }
 
-        async function fetchQuran() {
-            const res = await fetch("https://api.alquran.cloud/v1/surah");
-            const data = await res.json();
-            document.getElementById('surah-list').innerHTML = data.data.map(s => `<option value="${s.number}">${s.number}. ${s.englishName}</option>`).join('');
-        }
-        function toggleAudio() {
-            const audio = document.getElementById('audio-quran');
-            if (audio.paused) { audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${document.getElementById('surah-list').value}.mp3`; audio.play(); }
-            else audio.pause();
-        }
+        function del(id) { if(confirm("Hapus?")) _supabase.from('uploads').delete().match({id}).then(() => fetchData()); }
+        function setCat(c, btn) { currentCat = c; document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); btn.classList.add('active'); fetchData(); }
 
         function toggleGPS() {
-            if (watchId) { navigator.geolocation.clearWatch(watchId); watchId = null; }
+            const btn = document.getElementById('gps-btn');
+            if (watchId) { navigator.geolocation.clearWatch(watchId); watchId = null; btn.innerText = "AKTIFKAN GPS"; }
             else {
+                btn.innerText = "BERHENTI";
                 watchId = navigator.geolocation.watchPosition(pos => {
                     const { latitude: lat, longitude: lng } = pos.coords;
                     if (lastCoords) {
@@ -330,11 +328,11 @@
                         document.getElementById('display-steps').innerText = Math.floor(totalDist * 1312);
                     }
                     lastCoords = { lat, lng };
-                });
+                }, null, { enableHighAccuracy: true });
             }
         }
 
-        initAuth(); updateClock(); fetchPrayer(); fetchQuran();
+        fetchQuran(); fetchPrayer(); initAuth(); updateClock();
     </script>
 </body>
 </html>
