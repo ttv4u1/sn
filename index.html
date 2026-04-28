@@ -2,10 +2,12 @@
 <html lang="ms">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHINOBI DATA | AERO CLOUD v14.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SHINOBI DATA | AERO CLOUD v17.0</title>
     
+    <link id="dynamic-favicon" rel="icon" type="image/png" href="">
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@imgly/background-removal@1.4.5/dist/bundle.js"></script>
@@ -18,82 +20,112 @@
             --accent-gold: #f59e0b;
             --accent-green: #10b981;
             --text-dark: #0f172a;
-            --glass: rgba(255, 255, 255, 0.35);
-            --glass-border: rgba(255, 255, 255, 0.5);
+            --glass: rgba(255, 255, 255, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.7);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Bebas Neue', cursive !important; letter-spacing: 1.2px; }
+        /* BESARKAN TULISAN SECARA GLOBAL */
+        * { 
+            margin: 0; padding: 0; box-sizing: border-box; 
+            font-family: 'Bebas Neue', cursive !important; 
+            letter-spacing: 1.5px;
+        }
 
-        body { background: var(--sky-blue); color: var(--text-dark); min-height: 100vh; overflow-x: hidden; position: relative; }
+        body { 
+            background: var(--sky-blue); color: var(--text-dark); 
+            min-height: 100vh; overflow-x: hidden; position: relative;
+            font-size: 1.4rem; /* Tulisan lebih besar */
+        }
 
+        /* ANIMATED BACKGROUND */
         .sky-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: linear-gradient(to bottom, #4faef1 0%, #cae9ff 100%); }
         .cloud { position: absolute; background: white; border-radius: 100px; opacity: 0.6; filter: blur(40px); animation: drift linear infinite; z-index: -1; }
-        .c1 { width: 500px; height: 150px; top: 10%; left: -600px; animation-duration: 100s; }
-        @keyframes drift { from { transform: translateX(-100px); } to { transform: translateX(calc(100vw + 700px)); } }
+        .c1 { width: 500px; height: 150px; top: 10%; left: -500px; animation-duration: 80s; }
+        @keyframes drift { from { transform: translateX(-100px); } to { transform: translateX(calc(100vw + 600px)); } }
 
-        /* HEADER */
+        /* HEADER RESPONSIVE & BESAR */
         header { 
-            margin: 10px 2%; padding: 8px 25px; 
+            margin: 15px; padding: 15px 30px; 
             background: var(--glass); backdrop-filter: blur(25px); 
             border: 2px solid var(--glass-border); border-radius: 100px; 
-            display: flex; flex-direction: row; align-items: center; justify-content: space-between;
-            position: sticky; top: 10px; z-index: 1000;
+            display: flex; align-items: center; justify-content: space-between;
+            position: sticky; top: 15px; z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            gap: 15px;
         }
 
         .header-left { display: flex; align-items: center; gap: 15px; }
-        .shinobi-box { background: linear-gradient(135deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2)); padding: 5px 25px; border-radius: 12px; border: 2px solid #fff; position: relative; overflow: hidden; }
-        .shinobi-box h1 { font-size: 1.8rem; color: #fff; line-height: 1.1; margin-top: 2px; }
-        .ver-badge { background: linear-gradient(45deg, #ff4e50, #f9d423); padding: 3px 10px; border-radius: 8px; font-size: 0.8rem; color: #fff; border: 1px solid #fff; }
+        .shinobi-box { background: #fff; padding: 8px 25px; border-radius: 15px; border: 2px solid var(--accent-blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .shinobi-box h1 { font-size: 2.2rem; color: var(--accent-blue); line-height: 1; }
 
-        .clock-box { background: rgba(255,255,255,0.3); padding: 5px 20px; border-radius: 50px; border: 1px solid rgba(255,255,255,0.5); display: flex; gap: 10px; }
-        #live-hari { color: var(--accent-blue); font-size: 0.9rem; border-right: 1px solid rgba(0,0,0,0.1); padding-right: 10px; }
-        #live-masa { font-size: 1.1rem; font-family: 'JetBrains Mono', monospace !important; }
+        .clock-box { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.6); padding: 8px 25px; border-radius: 50px; border: 1px solid #fff; }
+        #live-masa { font-family: 'JetBrains Mono', monospace !important; font-weight: bold; color: var(--text-dark); font-size: 1.6rem; }
 
-        /* PROFILE */
-        .profile-hub { display: flex; align-items: center; background: #fff; border-radius: 50px; padding: 3px; width: 48px; overflow: hidden; transition: 0.5s; border: 1.5px solid var(--glass-border); }
-        .profile-hub.expanded { width: 220px; padding-right: 15px; }
-        .avatar { width: 38px; height: 38px; background: var(--accent-blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; flex-shrink: 0; cursor: pointer; }
+        /* PROFILE HUD */
+        .profile-hub { display: flex; align-items: center; background: #fff; border-radius: 100px; padding: 4px; width: 60px; overflow: hidden; transition: 0.5s; border: 2px solid var(--accent-blue); cursor: pointer; }
+        .profile-hub.expanded { width: 250px; padding-right: 20px; }
+        .avatar { width: 48px; height: 48px; background: var(--accent-blue); color: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0; }
 
-        /* MAIN CONTENT */
-        .main-container { display: grid; grid-template-columns: 320px 1fr; gap: 20px; padding: 15px 2% 80px 2%; }
-        .glass-panel { background: var(--glass); backdrop-filter: blur(15px); border: 2px solid var(--glass-border); border-radius: 30px; padding: 20px; margin-bottom: 20px; }
+        /* MAIN CONTAINER LAYOUT */
+        .main-container { 
+            display: grid; grid-template-columns: 360px 1fr; 
+            gap: 25px; padding: 20px; max-width: 1600px; margin: 0 auto;
+        }
+
+        /* SYNC CLOUD - NOMBOR 1 */
+        .sync-section { 
+            background: var(--accent-blue); color: white; padding: 25px; 
+            border-radius: 30px; text-align: center; cursor: pointer; 
+            box-shadow: 0 12px 30px rgba(14, 165, 233, 0.4); margin-bottom: 25px;
+            transition: 0.3s; border: 3px solid rgba(255,255,255,0.3);
+        }
+        .sync-section:hover { transform: scale(1.02); background: #0284c7; }
+        .sync-section h2 { font-size: 2.5rem; text-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         
-        /* 1. SYNC */
-        .sync-section { background: var(--accent-blue); color: white; padding: 20px; border-radius: 20px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
-        .sync-section:hover { background: #0284c7; }
-        #progress-container { width: 100%; height: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-top: 10px; display: none; overflow: hidden; }
-        #progress-bar { height: 100%; background: #fff; width: 0%; transition: 0.3s; }
+        #progress-bar-container { width: 100%; height: 12px; background: rgba(0,0,0,0.2); border-radius: 10px; margin-top: 15px; display: none; overflow: hidden; }
+        #progress-bar-fill { height: 100%; background: #fff; width: 0%; transition: 0.3s; }
 
-        /* 2. PRAYER */
-        .prayer-row { display: flex; justify-content: space-between; padding: 6px 12px; font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.2); }
-        .prayer-row.next { background: var(--accent-blue); color: white; border-radius: 10px; }
+        /* GLASS PANELS */
+        .glass-panel { background: var(--glass); backdrop-filter: blur(20px); border: 2px solid var(--glass-border); border-radius: 40px; padding: 25px; margin-bottom: 25px; }
 
-        /* FUEL PANEL */
-        .fuel-card { background: rgba(255,255,255,0.3); border-radius: 15px; padding: 12px; margin-top: 10px; }
-        .fuel-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .fuel-price { color: var(--accent-gold); font-size: 1.3rem; font-weight: bold; }
-        .fuel-label { font-size: 0.8rem; background: #fff; padding: 2px 6px; border-radius: 5px; }
-
-        /* QIBLAT FINDER */
-        .qiblat-box { text-align: center; margin-top: 15px; }
-        .compass { 
-            width: 120px; height: 120px; border: 4px solid var(--text-dark); border-radius: 50%; 
-            margin: 10px auto; position: relative; transition: 0.2s; background: white;
+        /* NAV TABS RESPONSIVE */
+        .nav-scroll { display: flex; gap: 12px; overflow-x: auto; padding: 5px 0 15px 0; scrollbar-width: none; }
+        .nav-scroll::-webkit-scrollbar { display: none; }
+        .nav-item { 
+            white-space: nowrap; padding: 12px 30px; background: #fff; 
+            border-radius: 100px; font-size: 1.6rem; color: var(--text-dark);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05); cursor: pointer; border: 2px solid transparent;
+            transition: 0.3s;
         }
-        .needle { 
-            width: 4px; height: 50px; background: red; position: absolute; 
-            top: 10px; left: 50%; transform-origin: bottom center; transform: translateX(-50%); 
+        .nav-item.active { background: var(--accent-blue); color: #fff; border-color: #fff; }
+
+        /* PRAYER TIMES & UTILS */
+        .util-row { display: flex; justify-content: space-between; font-size: 1.4rem; padding: 10px 0; border-bottom: 1.5px solid rgba(0,0,0,0.05); }
+        .util-title { font-size: 1.8rem; color: var(--accent-blue); margin-bottom: 15px; border-bottom: 2px solid var(--accent-blue); display: inline-block; }
+
+        /* DATA GRID */
+        .grid-data { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+        .data-card { background: #fff; border-radius: 35px; padding: 15px; border: 2px solid var(--glass-border); transition: 0.3s; text-align: center; }
+        .data-card:hover { transform: translateY(-10px); box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        .data-card img { width: 100%; height: 220px; object-fit: cover; border-radius: 25px; margin-bottom: 10px; cursor: pointer; }
+        .btn-del { width: 100%; background: #ff4e50; color: #fff; border: none; padding: 10px; border-radius: 15px; font-size: 1.3rem; cursor: pointer; }
+
+        /* RESPONSIVE BREAKPOINTS */
+        @media (max-width: 1024px) {
+            .main-container { grid-template-columns: 1fr; }
+            header { padding: 10px 20px; border-radius: 30px; }
+            .shinobi-box h1 { font-size: 1.5rem; }
+            #live-masa { font-size: 1.2rem; }
+            .nav-item { padding: 10px 20px; font-size: 1.3rem; }
+            .sync-section h2 { font-size: 2rem; }
         }
-        .kaaba-icon { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); font-size: 1.2rem; }
 
-        /* DATA */
-        .grid-data { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
-        .data-card { background: #fff; border-radius: 25px; padding: 12px; border: 1.5px solid var(--glass-border); transition: 0.3s; }
-        .data-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 15px; }
-        .card-actions { display: flex; gap: 5px; margin-top: 8px; }
-        .btn-act { flex: 1; border: none; padding: 6px; border-radius: 8px; color: #fff; cursor: pointer; font-size: 0.9rem; }
-
-        @media (max-width: 1000px) { .main-container { grid-template-columns: 1fr; } }
+        @media (max-width: 480px) {
+            header { flex-direction: column; gap: 8px; border-radius: 20px; }
+            .clock-box { width: 100%; justify-content: center; }
+            .grid-data { grid-template-columns: 1fr; }
+            .data-card img { height: 300px; }
+        }
     </style>
 </head>
 <body>
@@ -104,104 +136,73 @@
     <header>
         <div class="header-left">
             <div class="shinobi-box"><h1>SHINOBI CLOUD</h1></div>
-            <div class="ver-badge">v14.0 PRO</div>
+            <div class="clock-box">
+                <span id="live-hari">...</span>
+                <span id="live-masa">00:00:00</span>
+            </div>
         </div>
-
-        <div class="clock-box">
-            <div id="live-hari">...</div>
-            <div id="live-masa">00:00:00 --</div>
-        </div>
-
         <div style="display: flex; align-items: center; gap: 10px;">
-            <button id="login-btn" style="background:#fff; border:1px solid #ddd; padding:8px 18px; border-radius:50px; cursor:pointer;" onclick="login()">LOGIN</button>
-            <div id="profile-hub" class="profile-hub">
-                <div class="avatar" id="avatar-initial" onclick="toggleProfile()">?</div>
-                <div style="margin-left:10px; white-space:nowrap;">
-                    <div id="user-name" style="font-size: 1rem;">USER</div>
-                    <button style="background:none; border:none; color:red; cursor:pointer; font-size: 0.8rem;" onclick="logout()">LOGOUT</button>
+            <button id="login-btn" style="background:#fff; border:2px solid #ddd; padding:10px 25px; border-radius:100px; font-size:1.2rem; cursor:pointer;" onclick="login()">LOGIN</button>
+            <div id="profile-hub" class="profile-hub" onclick="toggleProfile()">
+                <div class="avatar" id="avatar-initial">?</div>
+                <div style="margin-left:15px; white-space:nowrap; overflow:hidden;">
+                    <div id="user-name" style="font-size:1.4rem;">USER</div>
+                    <button style="background:none; border:none; color:red; font-size:1rem;" onclick="logout()">KELUAR</button>
                 </div>
             </div>
         </div>
     </header>
 
     <div class="main-container">
+        <!-- SIDEBAR (WAKTU SOLAT & UTILS) -->
         <aside>
-            <!-- 1. SYNC CLOUD WITH PERCENT -->
-            <div class="sync-section" onclick="document.getElementById('f-input').click()">
-                <div style="font-size: 0.8rem; opacity: 0.8;">NOMBOR 1</div>
-                <div style="font-size: 1.6rem;">✦ SYNC CLOUD <span id="percent-val"></span> ✦</div>
-                <div id="progress-container"><div id="progress-bar"></div></div>
+            <!-- NOMBOR 2: WAKTU SOLAT -->
+            <div class="glass-panel">
+                <div class="util-title">🕌 WAKTU SOLAT</div>
+                <div id="prayer-list">
+                    <div class="util-row"><span>Subuh</span> <span id="p-fajr">-</span></div>
+                    <div class="util-row"><span>Zohor</span> <span id="p-dhuhr">-</span></div>
+                    <div class="util-row"><span>Asar</span> <span id="p-asr">-</span></div>
+                    <div class="util-row"><span>Maghrib</span> <span id="p-maghrib">-</span></div>
+                    <div class="util-row"><span>Isyak</span> <span id="p-isha">-</span></div>
+                </div>
             </div>
 
-            <!-- 2. WAKTU SOLAT -->
-            <div class="prayer-box glass-panel" style="padding: 15px; margin-bottom: 15px;">
-                <div style="font-size: 1.2rem; color: var(--accent-blue); margin-bottom: 10px;">🕌 WAKTU SOLAT</div>
-                <div id="p-subuh" class="prayer-row"><span>Subuh</span> <span class="pt">-</span></div>
-                <div id="p-zohor" class="prayer-row"><span>Zohor</span> <span class="pt">-</span></div>
-                <div id="p-asar" class="prayer-row"><span>Asar</span> <span class="pt">-</span></div>
-                <div id="p-maghrib" class="prayer-row"><span>Maghrib</span> <span class="pt">-</span></div>
-                <div id="p-isyak" class="prayer-row"><span>Isyak</span> <span class="pt">-</span></div>
-            </div>
-
-            <!-- 3. UTILITIES (OIL & QIBLAT) -->
-            <div class="glass-panel" style="padding: 15px;">
-                <div style="font-size: 1.2rem; color: var(--accent-purple); margin-bottom: 10px;">🛠️ UTILITIES</div>
-                
-                <!-- HARGA MINYAK -->
-                <div class="fuel-card">
-                    <div style="font-size:0.9rem; margin-bottom:5px;">⛽ HARGA MINYAK MY</div>
-                    <div class="fuel-item"><span>RON 95</span><span class="fuel-label">SUBSIDI</span><span class="fuel-price">RM 2.05</span></div>
-                    <div class="fuel-item"><span>RON 97</span><span class="fuel-label">PASARAN</span><span class="fuel-price">RM 3.47</span></div>
-                    <div class="fuel-item"><span>DIESEL</span><span class="fuel-label">B10</span><span class="fuel-price">RM 2.15</span></div>
+            <!-- NOMBOR 3: UTILITIES -->
+            <div class="glass-panel">
+                <div class="util-title">🛠️ UTILITIES</div>
+                <div style="text-align: center;">
+                    <div style="font-size:1rem; opacity:0.7;">LANGKAH GPS</div>
+                    <div id="display-steps" style="font-size:4rem; color:var(--accent-green); line-height: 1;">0</div>
+                    <button style="width:100%; padding:12px; background:var(--accent-blue); color:#fff; border:none; border-radius:15px; font-size:1.4rem; margin-top:10px;" onclick="toggleGPS()">MULA TRACKING</button>
                 </div>
 
-                <!-- QIBLAT FINDER -->
-                <div class="qiblat-box">
-                    <div style="font-size:0.9rem;">🕋 QIBLAT FINDER</div>
-                    <div class="compass" id="compass">
-                        <div class="kaaba-icon">🕋</div>
-                        <div class="needle" id="needle"></div>
-                    </div>
-                    <button style="font-size:0.8rem; background:none; border:1px solid #ddd; padding:4px 10px; border-radius:5px; cursor:pointer;" onclick="initCompass()">AKTIFKAN KOMPAS</button>
-                </div>
-
-                <!-- QURAN & GPS -->
-                <select id="surah-list" style="width:100%; padding:8px; border-radius:10px; margin-top:15px; border:none;"></select>
-                <button style="width:100%; padding:8px; border-radius:10px; background:var(--accent-green); color:#fff; border:none; cursor:pointer; margin-top:5px;" onclick="toggleAudio()">AL-QURAN</button>
-                <audio id="audio-quran"></audio>
-
-                <div style="text-align:center; margin-top:15px;">
-                    <div id="display-steps" style="font-size:2rem; color:var(--accent-green);">0</div>
-                    <button style="width:100%; padding:8px; border-radius:10px; background:var(--accent-blue); color:#fff; border:none; cursor:pointer;" onclick="toggleGPS()">TRACK GPS</button>
+                <div style="margin-top:20px; background:white; padding:15px; border-radius:20px; text-align:center;">
+                    <div style="font-size:1rem;">HARGA MINYAK RON95</div>
+                    <div style="font-size:2rem; color:var(--accent-gold);">RM 2.05</div>
                 </div>
             </div>
         </aside>
 
+        <!-- MAIN AREA (SYNC & DATA) -->
         <main>
-            <div style="display:flex; gap:10px; margin-bottom: 20px; flex-wrap: wrap;">
-                <div class="nav-item active" style="padding:10px 20px; background:#fff; border-radius:15px; cursor:pointer;" onclick="setCat('Resit', this)">📜 RESIT</div>
-                <div class="nav-item" style="padding:10px 20px; background:rgba(255,255,255,0.4); border-radius:15px; cursor:pointer;" onclick="setCat('Logistik', this)">🚛 LOGISTIK</div>
-                <div class="nav-item" style="padding:10px 20px; background:rgba(255,255,255,0.4); border-radius:15px; cursor:pointer;" onclick="setCat('Minyak', this)">⛽ MINYAK</div>
-                <div class="nav-item" style="padding:10px 20px; background:rgba(255,255,255,0.4); border-radius:15px; cursor:pointer; color:var(--accent-gold);" onclick="setCat('Global', this)">🌎 COMMUNITY</div>
+            <!-- NOMBOR 1: SYNC CLOUD -->
+            <div class="sync-section" onclick="document.getElementById('f-input').click()">
+                <h2 id="sync-text">✦ SYNC CLOUD <span id="percent-val"></span> ✦</h2>
+                <div id="progress-bar-container"><div id="progress-bar-fill"></div></div>
             </div>
 
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:15px; margin-bottom:20px;">
-                <div class="glass-panel" style="display:flex; justify-content:space-between; align-items:center; background:rgba(139, 92, 246, 0.1); margin:0; padding:15px; border-radius:20px;">
-                    <div style="font-size:1.1rem; color:var(--accent-purple);">🤖 AI BG REMOVE</div>
-                    <input type="checkbox" id="ai-toggle" style="width:22px; height:22px;">
-                </div>
-                <div class="glass-panel" style="display:flex; justify-content:space-between; align-items:center; background:rgba(245, 158, 11, 0.1); margin:0; padding:15px; border-radius:20px;">
-                    <div style="font-size:1.1rem; color:var(--accent-gold);">🌎 AUTO SHARE GLOBAL</div>
-                    <input type="checkbox" id="share-toggle" style="width:22px; height:22px;">
-                </div>
+            <div class="nav-scroll">
+                <div class="nav-item active" onclick="setCat('Resit', this)">📜 RESIT</div>
+                <div class="nav-item" onclick="setCat('Logistik', this)">🚛 LOGISTIK</div>
+                <div class="nav-item" onclick="setCat('Minyak', this)">⛽ MINYAK</div>
+                <div class="nav-item" style="color:var(--accent-gold); border-color:var(--accent-gold);" onclick="setCat('Global', this)">🌎 COMMUNITY</div>
             </div>
 
             <input type="file" id="f-input" hidden accept="image/*,.heic">
             <div id="data-grid" class="grid-data"></div>
         </main>
     </div>
-
-    <div id="modal" style="position:fixed; inset:0; background:rgba(255,255,255,0.9); z-index:10000; display:none; align-items:center; justify-content:center;" onclick="this.style.display='none'"><img id="modal-img" style="max-width:85%; border-radius:20px;"></div>
 
     <script>
         const SUPABASE_URL = 'https://wacziigqqdmfhkrycdrf.supabase.co';
@@ -210,88 +211,77 @@
 
         let currentUser = null, currentCat = "Resit", totalDist = 0, lastCoords = null, watchId = null;
 
+        // --- FAVICON & PROGRESS ---
+        function updateFavicon(progress = 0, status = 'idle') {
+            const canvas = document.createElement('canvas');
+            canvas.width = 32; canvas.height = 32;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = status === 'success' ? '#10b981' : (status === 'processing' ? '#8b5cf6' : '#0ea5e9');
+            ctx.beginPath(); ctx.arc(16, 16, 14, 0, Math.PI * 2); ctx.fill();
+            if (progress > 0) {
+                ctx.fillStyle = "#fff"; ctx.font = "bold 12px Arial"; ctx.textAlign = "center";
+                ctx.fillText(progress + "%", 16, 21);
+            }
+            document.getElementById('dynamic-favicon').href = canvas.toDataURL('image/png');
+        }
+
+        function updateProg(v) {
+            const bar = document.getElementById('progress-bar-fill');
+            const cont = document.getElementById('progress-bar-container');
+            const txt = document.getElementById('percent-val');
+            cont.style.display = 'block'; bar.style.width = v + '%'; txt.innerText = `(${v}%)`;
+            updateFavicon(v, v < 100 ? 'processing' : 'success');
+            if(v >= 100) setTimeout(() => { cont.style.display = 'none'; txt.innerText = ''; updateFavicon(0, 'idle'); }, 3000);
+        }
+
         // --- CLOCK ---
         function updateClock() {
             const now = new Date();
             const hari = ["AHAD", "ISNIN", "SELASA", "RABU", "KHAMIS", "JUMAAT", "SABTU"];
             document.getElementById('live-hari').innerText = hari[now.getDay()];
-            document.getElementById('live-masa').innerText = now.toLocaleTimeString('ms-MY', { hour12: true }).toUpperCase();
+            document.getElementById('live-masa').innerText = now.toLocaleTimeString('ms-MY', { hour12: false });
         }
         setInterval(updateClock, 1000);
 
-        // --- COMPASS (QIBLAT) ---
-        function initCompass() {
-            if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-                DeviceOrientationEvent.requestPermission().then(state => {
-                    if (state === 'granted') window.addEventListener('deviceorientation', handleOrientation);
-                });
-            } else { window.addEventListener('deviceorientation', handleOrientation); }
-        }
-        function handleOrientation(event) {
-            let compass = event.webkitCompassHeading || Math.abs(event.alpha - 360);
-            const qiblaAngle = 292; // Approx for Malaysia
-            document.getElementById('compass').style.transform = `rotate(${-compass}deg)`;
-            document.getElementById('needle').style.transform = `translateX(-50%) rotate(${qiblaAngle}deg)`;
-        }
-
-        // --- UPLOAD PROGRESS % ---
-        function updateProgress(val) {
-            const pCont = document.getElementById('progress-container');
-            const pBar = document.getElementById('progress-bar');
-            const pTxt = document.getElementById('percent-val');
-            pCont.style.display = 'block';
-            pBar.style.width = val + '%';
-            pTxt.innerText = `(${val}%)`;
-            if(val >= 100) setTimeout(() => { pCont.style.display = 'none'; pTxt.innerText = ''; pBar.style.width = '0%'; }, 2000);
-        }
-
+        // --- UPLOAD ---
         document.getElementById('f-input').onchange = async (e) => {
             const file = e.target.files[0]; if (!file || !currentUser) return;
             try {
-                updateProgress(10);
-                let uploadFile = file;
+                updateProg(20);
+                let upFile = file;
                 if (file.name.toLowerCase().endsWith('.heic')) {
-                    updateProgress(30);
                     const blob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.6 });
-                    uploadFile = blob[0] || blob;
+                    upFile = blob[0] || blob;
                 }
-                updateProgress(50);
-                if (document.getElementById('ai-toggle').checked) {
-                    uploadFile = await imglyRemoveBackground(uploadFile);
-                    updateProgress(75);
-                }
+                updateProg(60);
                 const reader = new FileReader();
                 reader.onload = async (ev) => {
                     const img = new Image();
                     img.onload = async () => {
                         const canvas = document.createElement('canvas');
-                        canvas.width = 800; canvas.height = (800 / img.width) * img.height;
+                        canvas.width = 1000; canvas.height = (1000 / img.width) * img.height;
                         canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
                         await _supabase.from('uploads').insert([{ 
                             user_id: currentUser.id, category: currentCat, 
-                            image_url: canvas.toDataURL('image/png', 0.8), file_name: file.name,
-                            is_public: document.getElementById('share-toggle').checked 
+                            image_url: canvas.toDataURL('image/png', 0.7), file_name: file.name
                         }]);
-                        updateProgress(100); fetchData();
+                        updateProg(100); fetchData();
                     };
                     img.src = ev.target.result;
                 };
-                reader.readAsDataURL(uploadFile);
-            } catch (err) { alert("Error."); updateProgress(0); }
+                reader.readAsDataURL(upFile);
+            } catch (err) { updateFavicon(0, 'idle'); alert("Ralat."); }
         };
 
-        // --- DATA & AUTH ---
+        // --- AUTH & DATA ---
         async function fetchData() {
             if (!currentUser) return;
-            const query = currentCat === 'Global' ? _supabase.from('uploads').select('*').eq('is_public', true) : _supabase.from('uploads').select('*').eq('user_id', currentUser.id).eq('category', currentCat);
-            const { data } = await query.order('created_at', { ascending: false });
+            const { data } = await _supabase.from('uploads').select('*').eq('user_id', currentUser.id).eq('category', currentCat).order('created_at', { ascending: false });
             document.getElementById('data-grid').innerHTML = data.map(item => `
                 <div class="data-card">
-                    <img src="${item.image_url}" onclick="viewImg('${item.image_url}')">
-                    <div class="card-actions">
-                        <button class="btn-act" style="background:#0ea5e9" onclick="printData('${item.image_url}')">PRINT</button>
-                        ${item.user_id === currentUser.id ? `<button class="btn-act" style="background:red" onclick="del('${item.id}')">DEL</button>` : ''}
-                    </div>
+                    <img src="${item.image_url}" onclick="window.open('${item.image_url}')">
+                    <div style="font-size:1.2rem; margin-bottom:10px;">${item.file_name.substring(0,15)}...</div>
+                    <button class="btn-del" onclick="del('${item.id}')">PADAM</button>
                 </div>
             `).join('');
         }
@@ -301,46 +291,40 @@
             if (session) handleIn(session.user);
             _supabase.auth.onAuthStateChange((_, s) => { if(s) handleIn(s.user); else handleOut(); });
         }
+
         function handleIn(user) {
-            currentUser = user; document.getElementById('login-btn').style.display = 'none';
-            const hub = document.getElementById('profile-hub'); hub.style.display = 'flex';
+            currentUser = user;
+            document.getElementById('login-btn').style.display='none';
+            document.getElementById('profile-hub').style.display='flex';
             document.getElementById('user-name').innerText = user.user_metadata.full_name.split(' ')[0];
             document.getElementById('avatar-initial').innerText = user.user_metadata.full_name[0];
             fetchData();
         }
-        function handleOut() { currentUser = null; document.getElementById('login-btn').style.display = 'block'; document.getElementById('profile-hub').style.display = 'none'; }
+
+        function handleOut() { currentUser = null; document.getElementById('login-btn').style.display='block'; document.getElementById('profile-hub').style.display='none'; }
         function login() { _supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } }); }
         function logout() { _supabase.auth.signOut(); }
         function toggleProfile() { document.getElementById('profile-hub').classList.toggle('expanded'); }
-        function printData(u) { viewImg(u); setTimeout(() => window.print(), 500); }
-        function del(id) { if(confirm("Padam?")) { _supabase.from('uploads').delete().match({id}).then(() => fetchData()); } }
         function setCat(c, btn) { 
             currentCat = c; 
-            document.querySelectorAll('.nav-item').forEach(i => i.style.background = 'rgba(255,255,255,0.4)'); 
-            btn.style.background = '#fff'; fetchData(); 
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active')); 
+            btn.classList.add('active'); fetchData(); 
         }
-        function viewImg(u) { document.getElementById('modal-img').src = u; document.getElementById('modal').style.display = 'flex'; }
+        function del(id) { if(confirm("Padam?")) { _supabase.from('uploads').delete().match({id}).then(() => fetchData()); } }
 
-        // --- PRAYER/QURAN/GPS ---
+        // --- PRAYER ---
         async function fetchPrayer() {
             const res = await fetch("https://api.azanpro.com/times/today.json?zone=sgr01&format=12");
-            const data = await res.json(); const d = data.results;
-            document.getElementById('p-subuh').querySelector('.pt').innerText = d.fajr;
-            document.getElementById('p-zohor').querySelector('.pt').innerText = d.dhuhr;
-            document.getElementById('p-asar').querySelector('.pt').innerText = d.asr;
-            document.getElementById('p-maghrib').querySelector('.pt').innerText = d.maghrib;
-            document.getElementById('p-isyak').querySelector('.pt').innerText = d.isha;
-        }
-        async function fetchQuran() {
-            const res = await fetch("https://api.alquran.cloud/v1/surah");
             const data = await res.json();
-            document.getElementById('surah-list').innerHTML = data.data.map(s => `<option value="${s.number}">${s.number}. ${s.englishName}</option>`).join('');
+            const d = data.results;
+            document.getElementById('p-fajr').innerText = d.fajr;
+            document.getElementById('p-dhuhr').innerText = d.dhuhr;
+            document.getElementById('p-asr').innerText = d.asr;
+            document.getElementById('p-maghrib').innerText = d.maghrib;
+            document.getElementById('p-isha').innerText = d.isha;
         }
-        function toggleAudio() {
-            const audio = document.getElementById('audio-quran');
-            if (audio.paused) { audio.src = `https://cdn.islamic.network/quran/audio-surah/128/ar.alafasy/${document.getElementById('surah-list').value}.mp3`; audio.play(); }
-            else audio.pause();
-        }
+
+        // --- GPS ---
         function toggleGPS() {
             if (watchId) { navigator.geolocation.clearWatch(watchId); watchId = null; }
             else {
@@ -348,7 +332,7 @@
                     const { latitude: lat, longitude: lng } = pos.coords;
                     if (lastCoords) {
                         const R = 6371; const dLat = (lat-lastCoords.lat)*Math.PI/180;
-                        const d = R * 2 * Math.atan2(Math.sqrt(Math.sin(dLat/2)**2), Math.sqrt(1-Math.sin(dLat/2)**2));
+                        const d = R * 2 * Math.atan2(Math.sqrt(Math.sin(dLat/2)**2), 1);
                         if(d > 0.001) totalDist += d;
                         document.getElementById('display-steps').innerText = Math.floor(totalDist * 1312);
                     }
@@ -357,7 +341,10 @@
             }
         }
 
-        fetchPrayer(); fetchQuran(); initAuth(); updateClock();
+        updateFavicon(0, 'idle');
+        initAuth();
+        updateClock();
+        fetchPrayer();
     </script>
 </body>
 </html>
