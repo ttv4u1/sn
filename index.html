@@ -3,159 +3,275 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SHINOBI DATA v1.12.0 | LIVE ENGINE</title>
+    <title>SHINOBI DATA v1.15.0 | BEBAS ZEN ENGINE</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@500;700&display=swap" rel="stylesheet">
+    <!-- GOOGLE FONTS: BEBAS NEUE -->
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/heic2any@0.0.4/dist/heic2any.min.js"></script>
 
     <style>
         :root {
-            --primary: #ff2d55;
-            --accent: #ffb700;
-            --white: #ffffff;
-            --bg-dark: #08080a;
-            --glass: rgba(0, 0, 0, 0.7);
-            --glow-red: 0 0 15px rgba(255, 45, 85, 0.8);
+            --crimson: #9b1c1c;
+            --gold: #d4af37;
+            --charcoal: #0f0f0f;
+            --parchment: #f4f1ea;
+            --ink-black: #050505;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Bebas Neue', cursive; letter-spacing: 1px; }
-        body { background-color: var(--bg-dark); color: var(--white); overflow-x: hidden; min-height: 100vh; }
-
-        /* BACKGROUND */
-        .animated-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background: #000; }
-        .anime-overlay { 
-            position: absolute; width: 110%; height: 110%; 
-            background: url('https://copilot.microsoft.com/th/id/BCO.f03d4abf-cf53-4d80-bf30-9efc53a2bb81.png') no-repeat center center; 
-            background-size: cover; opacity: 0.3; filter: blur(2px) brightness(0.6);
-            animation: bgMovement 30s infinite alternate linear;
+        /* GLOBAL TYPOGRAPHY: ALWAYS BEBAS NEUE */
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Bebas Neue', cursive; 
+            letter-spacing: 1.5px; 
         }
-        @keyframes bgMovement { from { transform: scale(1); } to { transform: scale(1.1) translate(-2%, -2%); } }
 
-        /* SHINING BUTTONS */
-        .btn-aura, .cat-btn, .btn-sm { position: relative; overflow: hidden; }
-        .btn-aura::after, .cat-btn::after, .btn-sm::after {
-            content: ''; position: absolute; top: -50%; left: -150%; width: 50%; height: 200%;
+        body { 
+            background-color: var(--charcoal); 
+            color: var(--parchment); 
+            min-height: 100vh;
+            background-image: 
+                linear-gradient(rgba(10, 10, 10, 0.75), rgba(10, 10, 10, 0.9)),
+                url('https://copilot.microsoft.com/th/id/BCO.f03d4abf-cf53-4d80-bf30-9efc53a2bb81.png');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            overflow-x: hidden;
+        }
+
+        /* SHINING BUTTON EFFECT */
+        .shining-btn {
+            position: relative;
+            overflow: hidden;
+            background: var(--crimson);
+            color: white;
+            border: 2px solid var(--gold);
+            padding: 14px 28px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: 0.3s;
+            box-shadow: 4px 4px 0px rgba(0,0,0,0.8);
+        }
+
+        .shining-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -150%;
+            width: 60%;
+            height: 200%;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: rotate(25deg); animation: shining 3s infinite;
+            transform: rotate(30deg);
+            animation: lightSweep 4s infinite;
         }
-        @keyframes shining { 0% { left: -150%; } 20% { left: 150%; } 100% { left: 150%; } }
 
-        /* LIVE NOTIFICATION (GRAB STYLE) */
+        @keyframes lightSweep {
+            0% { left: -150%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        .shining-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px var(--crimson);
+            border-color: #fff;
+        }
+
+        /* CUTE VERSION BOX */
+        .ver-tag {
+            background: var(--gold);
+            color: var(--ink-black);
+            padding: 4px 15px;
+            font-size: 1rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-left: 15px;
+            vertical-align: middle;
+            animation: pulseBox 2s infinite ease-in-out;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3);
+        }
+
+        @keyframes pulseBox {
+            0%, 100% { transform: scale(1) rotate(-2deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        /* HEADER */
+        header {
+            background: rgba(5, 5, 5, 0.95);
+            padding: 1.2rem 5%;
+            border-bottom: 5px solid var(--crimson);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .logo { font-size: 2.2rem; color: var(--parchment); text-shadow: 2px 2px var(--crimson); }
+
+        /* LIVE NOTIFICATION (MOBILE STYLE) */
         #live-notif {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px; background: rgba(20, 20, 25, 0.95);
-            backdrop-filter: blur(20px); border-radius: 20px; padding: 15px;
-            z-index: 10001; border: 1px solid rgba(255, 45, 85, 0.3);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; align-items: center; gap: 15px;
+            position: fixed; top: -120px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 380px; background: var(--parchment); color: var(--ink-black);
+            padding: 20px; z-index: 10001; border-radius: 15px;
+            border-left: 8px solid var(--crimson);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
-        #live-notif.active { top: 20px; }
-        .notif-icon { width: 45px; height: 45px; background: var(--primary); border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; box-shadow: var(--glow-red); }
-        .notif-content { flex: 1; }
-        .notif-title { font-family: 'Rajdhani'; font-weight: bold; font-size: 0.9rem; color: var(--accent); display: flex; justify-content: space-between; }
-        .notif-status { font-family: 'Rajdhani'; font-size: 0.75rem; color: #bbb; margin-bottom: 5px; text-transform: uppercase; }
-        .notif-progress-bg { width: 100%; height: 6px; background: #222; border-radius: 10px; overflow: hidden; }
-        .notif-progress-fill { width: 0%; height: 100%; background: var(--primary); box-shadow: var(--glow-red); transition: 0.3s; }
-        .live-badge { background: #00ff6a; color: black; padding: 2px 6px; border-radius: 4px; font-size: 0.6rem; font-weight: bold; animation: blink 1s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        #live-notif.active { top: 25px; }
 
-        /* VERSION BOX */
-        .version-box {
-            background: var(--primary); color: white; padding: 4px 12px; border-radius: 50px;
-            font-size: 0.8rem; display: inline-block; margin-left: 10px;
-            box-shadow: var(--glow-red); animation: pulseBox 2s infinite;
-        }
-        @keyframes pulseBox { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .progress-container { width: 100%; height: 6px; background: #ddd; margin-top: 10px; overflow: hidden; border-radius: 3px; }
+        #progress-bar { width: 0%; height: 100%; background: var(--crimson); transition: 0.4s; }
 
-        header { 
-            position: sticky; top: 0; z-index: 1000; background: rgba(0,0,0,0.85); 
-            backdrop-filter: blur(15px); border-bottom: 2px solid var(--primary); padding: 1rem 5%; 
-            display: flex; justify-content: space-between; align-items: center; 
+        /* LAYOUT */
+        .main-grid {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 40px;
+            padding: 40px 5%;
         }
 
-        .main-container { padding: 25px 5%; display: grid; grid-template-columns: 300px 1fr; gap: 25px; }
-        .side-panel { background: var(--glass); padding: 25px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); position: sticky; top: 100px; height: fit-content; }
+        .side-card {
+            background: rgba(10, 10, 10, 0.85);
+            border: 2px solid var(--crimson);
+            padding: 30px;
+            height: fit-content;
+            position: sticky; top: 120px;
+        }
+
+        .clock-ui {
+            font-size: 4rem;
+            color: var(--gold);
+            text-align: center;
+            border-bottom: 2px solid var(--gold);
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+        }
+
+        /* CATEGORY */
+        .cat-list { display: flex; flex-direction: column; gap: 12px; margin: 25px 0; }
+        .cat-item {
+            background: transparent; border: 1px solid #333; color: #aaa;
+            padding: 12px; cursor: pointer; text-align: left; font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .cat-item.active { background: var(--crimson); color: white; border-color: var(--gold); box-shadow: 4px 4px 0px var(--gold); }
+
+        /* UPLOAD ZONE */
+        .upload-zone {
+            background: rgba(255, 255, 255, 0.03);
+            border: 3px dashed var(--crimson);
+            padding: 80px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .upload-zone:hover { background: rgba(155, 28, 28, 0.1); border-color: var(--gold); }
+        .upload-zone h2 { font-size: 2.5rem; margin-bottom: 10px; }
+
+        /* DATA GALLERY */
+        .data-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+        }
+
+        .data-card {
+            background: #151515;
+            border: 1px solid #222;
+            padding: 12px;
+            transition: 0.4s;
+        }
+        .data-card:hover { border-color: var(--gold); transform: translateY(-8px); }
+        .data-img { width: 100%; height: 180px; object-fit: cover; background: #000; cursor: zoom-in; }
         
-        .clock-box { text-align: center; padding: 20px; border: 2px solid var(--accent); background: rgba(0,0,0,0.8); margin-bottom: 20px; clip-path: polygon(0 15%, 15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%); }
-        #clock-time { font-size: 3.5rem; color: var(--accent); }
+        .data-meta { padding: 12px 0; }
+        .data-label { color: var(--gold); font-size: 0.9rem; }
+        .data-title { font-size: 1.1rem; opacity: 0.8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .upload-section { background: var(--glass); padding: 30px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(10px); }
-        .category-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; margin-bottom: 25px; }
-        .cat-btn { background: #111; border: 1px solid var(--primary); color: white; padding: 12px; cursor: pointer; font-family: 'Rajdhani'; font-weight: bold; }
-        .cat-btn.active { background: var(--primary); box-shadow: var(--glow-red); }
+        .del-btn {
+            width: 100%; margin-top: 10px; background: none; border: 1px solid #444;
+            color: #777; font-size: 1rem; padding: 8px; cursor: pointer; transition: 0.3s;
+        }
+        .del-btn:hover { color: white; background: var(--crimson); border-color: var(--crimson); }
 
-        .drop-zone { border: 2px dashed var(--primary); padding: 50px 20px; text-align: center; border-radius: 10px; transition: 0.3s; cursor: pointer; background: rgba(0,0,0,0.5); }
-        
-        .data-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; margin-top: 30px; }
-        .item-card { background: rgba(0,0,0,0.8); border: 1px solid #333; padding: 8px; border-radius: 8px; transition: 0.3s; }
-        .img-wrap { width: 100%; height: 140px; overflow: hidden; border-radius: 4px; background: #000; display: flex; align-items: center; justify-content: center; }
-        .img-wrap img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .actions { display: flex; gap: 5px; margin-top: 8px; }
-        .btn-sm { flex: 1; padding: 6px; font-size: 0.75rem; border: none; cursor: pointer; color: white; border-radius: 3px; font-family: 'Rajdhani'; font-weight: bold; }
-        .btn-v { background: #333; } .btn-d { background: #500; }
+        /* MODAL */
+        #modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.98); z-index: 10000;
+            display: none; justify-content: center; align-items: center;
+        }
+        #modal img { max-width: 90%; max-height: 85vh; border: 5px solid var(--gold); }
 
-        #modal { position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.98); z-index: 10000; display: none; justify-content: center; align-items: center; }
-        #modal-img { max-width: 95%; max-height: 90vh; border: 2px solid var(--primary); }
-
-        @media (max-width: 768px) { .main-container { grid-template-columns: 1fr; } .side-panel { position: relative; top: 0; } }
+        @media (max-width: 950px) {
+            .main-grid { grid-template-columns: 1fr; }
+            .side-card { position: relative; top: 0; }
+        }
     </style>
 </head>
 <body>
 
-    <div class="animated-bg"><div class="anime-overlay"></div></div>
-
-    <!-- LIVE NOTIFICATION (DYNAMIC ISLAND STYLE) -->
+    <!-- LIVE NOTIFICATION SYSTEM -->
     <div id="live-notif">
-        <div class="notif-icon">🥷</div>
-        <div class="notif-content">
-            <div class="notif-title">
-                SHINOBI UPLOADER <span class="live-badge">LIVE</span>
-            </div>
-            <div id="notif-status-text" class="notif-status">MENUNGGU DATA...</div>
-            <div class="notif-progress-bg">
-                <div id="notif-progress-fill" class="notif-progress-fill"></div>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <div style="font-size: 2rem;">🥷</div>
+            <div style="flex:1">
+                <div style="font-size: 1.2rem; font-weight: bold;">SHINOBI DATA STREAM</div>
+                <div id="notif-text" style="font-size: 1rem; color: #555;">SEDIA UNTUK TUGASAN...</div>
+                <div class="progress-container">
+                    <div id="progress-bar"></div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Lightbox -->
-    <div id="modal" onclick="closeM()"><span style="position:absolute; top:20px; right:30px; font-size:3rem; cursor:pointer;">&times;</span><img id="modal-img" src=""></div>
+    <!-- LIGHTBOX -->
+    <div id="modal" onclick="this.style.display='none'">
+        <img id="modal-img" src="">
+    </div>
 
     <header>
-        <div class="logo">✦ SHINOBI <span class="version-box">v1.12.0</span></div>
-        <div class="auth-wrap">
-            <button id="login-btn" class="btn-aura">GOOGLE LOGIN</button>
-            <button id="logout-btn" class="btn-aura btn-secondary hidden">KELUAR</button>
+        <div class="logo">SHINOBI ARKIB <div class="ver-tag">v1.15.0</div></div>
+        <div id="auth-controls">
+            <button id="login-btn" class="shining-btn">MASUK SISTEM</button>
+            <button id="logout-btn" class="shining-btn" style="display:none; background:#222;">LOG KELUAR</button>
         </div>
     </header>
 
-    <div class="main-container">
-        <aside class="side-panel">
-            <div class="clock-box"><div id="clock-time">00:00</div></div>
-            <div style="background: rgba(255,45,85,0.2); padding: 15px; border-left: 4px solid var(--primary);">
-                <h4 style="font-family: Rajdhani; font-size: 0.8rem; color: var(--accent);">DATABASE AKTIF</h4>
-                <div id="stat-count" style="font-size: 2.5rem;">0</div>
+    <div class="main-grid">
+        <aside>
+            <div class="side-card">
+                <div class="clock-ui" id="clock">00:00:00</div>
+                
+                <p style="font-size:1rem; color:var(--gold); text-align:center; margin-bottom:10px;">PILIH JENIS GULUNGAN</p>
+                <div class="cat-list">
+                    <button class="cat-item active" onclick="setCat('Resit', this)">RESIT RASMI</button>
+                    <button class="cat-item" onclick="setCat('Logistik', this)">DATA LOGISTIK</button>
+                    <button class="cat-item" onclick="setCat('Minyak', this)">KAD MINYAK</button>
+                    <button class="cat-item" onclick="setCat('Lain', this)">PELBAGAI DATA</button>
+                </div>
+
+                <div style="background:rgba(155, 28, 28, 0.1); padding:20px; border-left: 6px solid var(--crimson);">
+                    <p style="font-size:1rem; color:#888;">TOTAL ARKIB</p>
+                    <h2 id="stat-count" style="font-size:3rem;">0</h2>
+                </div>
             </div>
         </aside>
 
-        <main class="upload-section">
-            <div class="category-grid">
-                <button class="cat-btn active" onclick="setCat('Resit', this)">RESIT</button>
-                <button class="cat-btn" onclick="setCat('Logistik', this)">LOGISTIK</button>
-                <button class="cat-btn" onclick="setCat('Kad Minyak', this)">KAD MINYAK</button>
-                <button class="cat-btn" onclick="setCat('Lain-lain', this)">LAIN-LAIN</button>
-            </div>
-
-            <div class="drop-zone" onclick="document.getElementById('f-input').click()">
-                <p style="font-family: Rajdhani; font-weight: bold; color: var(--accent); font-size: 1.2rem;">KLIK UNTUK HANTAR DATA</p>
-                <p style="font-size: 0.75rem; opacity: 0.7; margin-top: 5px;">SISTEM AUTO-LIVE DI AKTIFKAN</p>
+        <main>
+            <div class="upload-zone" onclick="document.getElementById('f-input').click()">
+                <h2>HANTAR DATA KE ARKIB</h2>
+                <p style="font-size:1.2rem; color:var(--gold);">KLIK UNTUK MEMILIH FAIL (HEIC/JPG/PNG/PDF)</p>
                 <input type="file" id="f-input" hidden accept="image/*,.heic,.pdf">
             </div>
 
-            <div class="data-grid" id="data-grid"></div>
+            <div class="data-gallery" id="data-grid"></div>
         </main>
     </div>
 
@@ -167,99 +283,107 @@
         let currentUser = null;
         let currentCat = "Resit";
 
-        // --- LIVE NOTIFICATION ENGINE ---
-        function updateLiveNotif(show, progress, status) {
-            const el = document.getElementById('live-notif');
-            const bar = document.getElementById('notif-progress-fill');
-            const txt = document.getElementById('notif-status-text');
-            
-            if(show) el.classList.add('active');
-            else setTimeout(() => el.classList.remove('active'), 2000);
-
-            bar.style.width = progress + '%';
-            txt.innerText = status;
-
-            // Trigger haptic simple (hanya Android sokong)
-            if (window.navigator.vibrate) window.navigator.vibrate(10);
-        }
-
-        async function checkSession() {
+        // --- AUTH ENGINE ---
+        async function initAuth() {
             const { data: { session } } = await _supabase.auth.getSession();
             if (session) handleIn(session.user);
-            _supabase.auth.onAuthStateChange((_, s) => { if(s) handleIn(s.user); else handleOut(); });
+
+            _supabase.auth.onAuthStateChange((event, session) => {
+                if (session) handleIn(session.user);
+                else handleOut();
+            });
+
+            if (window.location.hash) {
+                window.history.replaceState(null, null, window.location.pathname);
+            }
         }
 
-        function handleIn(u) {
-            currentUser = u;
-            document.getElementById('login-btn').classList.add('hidden');
-            document.getElementById('logout-btn').classList.remove('hidden');
-            fetchItems();
+        function handleIn(user) {
+            currentUser = user;
+            document.getElementById('login-btn').style.display = 'none';
+            document.getElementById('logout-btn').style.display = 'block';
+            fetchData();
         }
 
         function handleOut() {
             currentUser = null;
-            document.getElementById('login-btn').classList.remove('hidden');
-            document.getElementById('logout-btn').classList.add('hidden');
+            document.getElementById('login-btn').style.display = 'block';
+            document.getElementById('logout-btn').style.display = 'none';
             document.getElementById('data-grid').innerHTML = '';
+            document.getElementById('stat-count').innerText = '0';
         }
 
-        document.getElementById('login-btn').onclick = () => _supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: window.location.href } });
-        document.getElementById('logout-btn').onclick = async () => { await _supabase.auth.signOut(); window.location.reload(); };
+        document.getElementById('login-btn').onclick = () => {
+            _supabase.auth.signInWithOAuth({ 
+                provider: 'google',
+                options: { redirectTo: window.location.origin + window.location.pathname }
+            });
+        };
 
-        function setCat(c, b) {
+        document.getElementById('logout-btn').onclick = () => _supabase.auth.signOut();
+
+        // --- UI & NOTIFICATIONS ---
+        function setNotif(show, progress, txt) {
+            const el = document.getElementById('live-notif');
+            if(show) el.classList.add('active');
+            else setTimeout(() => el.classList.remove('active'), 2500);
+            
+            document.getElementById('progress-bar').style.width = progress + '%';
+            document.getElementById('notif-text').innerText = txt.toUpperCase();
+        }
+
+        function setCat(c, btn) {
             currentCat = c;
-            document.querySelectorAll('.cat-btn').forEach(x => x.classList.remove('active'));
-            b.classList.add('active');
+            document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
         }
 
+        // --- DATA PROCESSING ---
         document.getElementById('f-input').onchange = async (e) => {
             const file = e.target.files[0];
             if (!file || !currentUser) return;
 
             try {
-                updateLiveNotif(true, 10, "Membaca Fail...");
+                setNotif(true, 15, "Menganalisis fail shinobi...");
                 let uploadFile = file;
                 let fileName = file.name;
-                const ext = fileName.split('.').pop().toLowerCase();
 
-                if (ext === 'heic') {
-                    updateLiveNotif(true, 30, "Menukar Format HEIC...");
+                if (fileName.toLowerCase().endsWith('.heic')) {
+                    setNotif(true, 35, "Menukar format HEIC ke JPG...");
                     const blob = await heic2any({ blob: file, toType: "image/jpeg", quality: 0.5 });
                     uploadFile = Array.isArray(blob) ? blob[0] : blob;
                     fileName = fileName.replace(/\.[^/.]+$/, ".jpg");
                 }
 
-                updateLiveNotif(true, 60, "Mengecilkan Saiz Imej...");
-                const base64 = await processImage(uploadFile);
+                setNotif(true, 65, "Mengecilkan saiz gulungan...");
+                const base64 = await resizeImg(uploadFile);
 
-                updateLiveNotif(true, 85, "Menghantar ke Shinobi Cloud...");
+                setNotif(true, 85, "Menghantar ke awan arkib...");
                 const { error } = await _supabase.from('uploads').insert([
                     { user_id: currentUser.id, category: currentCat, image_url: base64, file_name: fileName }
                 ]);
 
                 if (error) throw error;
-
-                updateLiveNotif(true, 100, "Berjaya Dimuat Naik!");
-                setTimeout(() => { updateLiveNotif(false, 100, ""); fetchItems(); }, 1500);
-
+                setNotif(true, 100, "Misi Berjaya! Data disimpan.");
+                fetchData();
             } catch (err) {
-                updateLiveNotif(true, 100, "Ralat Muat Naik!");
-                setTimeout(() => updateLiveNotif(false, 0, ""), 3000);
+                setNotif(true, 100, "Ralat: Gagal memproses data.");
+            } finally {
+                setTimeout(() => setNotif(false, 0, "Sedia..."), 2000);
             }
         };
 
-        function processImage(file) {
+        function resizeImg(file) {
             return new Promise((resolve) => {
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     const img = new Image();
                     img.onload = () => {
                         const canvas = document.createElement('canvas');
-                        let w = img.width, h = img.height, max = 1200; 
-                        if (w > max) { h *= max / w; w = max; }
+                        let w = img.width, h = img.height;
+                        if (w > 1200) { h *= 1200 / w; w = 1200; }
                         canvas.width = w; canvas.height = h;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, w, h);
+                        canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                         resolve(canvas.toDataURL('image/jpeg', 0.6));
                     };
                     img.src = e.target.result;
@@ -268,45 +392,41 @@
             });
         }
 
-        async function fetchItems() {
+        async function fetchData() {
             if (!currentUser) return;
             const { data, error } = await _supabase.from('uploads').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
             if (error) return;
             document.getElementById('stat-count').innerText = data.length;
             const grid = document.getElementById('data-grid');
-            grid.innerHTML = '';
-            data.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'item-card';
-                card.innerHTML = `
-                    <div class="img-wrap" onclick="view('${item.image_url}')">
-                        <img src="${item.image_url}" loading="lazy">
+            grid.innerHTML = data.map(item => `
+                <div class="data-card">
+                    <img src="${item.image_url}" class="data-img" onclick="view('${item.image_url}')" loading="lazy">
+                    <div class="data-meta">
+                        <div class="data-label">${item.category}</div>
+                        <div class="data-title">${item.file_name}</div>
+                        <button class="del-btn" onclick="del('${item.id}')">HAPUS DATA</button>
                     </div>
-                    <div class="card-meta">
-                        <div style="color:var(--accent); font-size:0.7rem; font-weight:bold;">${item.category}</div>
-                        <div style="font-size:0.8rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${item.file_name}</div>
-                        <div class="actions">
-                            <button class="btn-sm btn-v" onclick="view('${item.image_url}')">LIHAT</button>
-                            <button class="btn-sm btn-d" onclick="del('${item.id}')">PADAM</button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
+                </div>
+            `).join('');
         }
 
         async function del(id) {
-            if (confirm("Padam data ini?")) {
-                await _supabase.from('uploads').delete().match({ id: id, user_id: currentUser.id });
-                fetchItems();
+            if (confirm("Hapuskan rekod ini dari arkib?")) {
+                await _supabase.from('uploads').delete().match({ id, user_id: currentUser.id });
+                fetchData();
             }
         }
 
-        function view(u) { document.getElementById('modal-img').src = u; document.getElementById('modal').style.display = 'flex'; }
-        function closeM() { document.getElementById('modal').style.display = 'none'; }
-        setInterval(() => { document.getElementById('clock-time').innerText = new Date().toLocaleTimeString('ms-MY', { hour12: false }); }, 1000);
-        
-        checkSession();
+        function view(u) { 
+            document.getElementById('modal-img').src = u; 
+            document.getElementById('modal').style.display = 'flex'; 
+        }
+
+        setInterval(() => { 
+            document.getElementById('clock').innerText = new Date().toLocaleTimeString('ms-MY', {hour12:false}); 
+        }, 1000);
+
+        initAuth();
     </script>
 </body>
 </html>
