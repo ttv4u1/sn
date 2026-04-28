@@ -466,31 +466,69 @@
     <script>
         // --- CONFIGURASI SUPABASE ---
         // Sila masukkan URL dan Key anda sendiri
-        const SUPABASE_URL = 'YOUR_SUPABASE_URL';
-        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const SUPABASE_URL = 'https://wacziigqqdmfhkrycdrf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhY3ppaWdxcWRtZmhrcnljZHJmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzczNzczNTIsImV4cCI6MjA5Mjk1MzM1Mn0.TD39LvuYkM8IZF6YUDNo-LYtfIFMPrxniy_cnHnHu8A';
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+        let currentUser = null;
         let currentCategory = "Resit";
 
-        // --- CLOCK SYSTEM ---
+        // --- 2. SISTEM JAM (CLOCK) ---
         function updateClock() {
             const now = new Date();
             const days = ['AHAD', 'ISNIN', 'SELASA', 'RABU', 'KHAMIS', 'JUMAAT', 'SABTU'];
             const months = ['JANUARI', 'FEBRUARI', 'MAC', 'APRIL', 'MEI', 'JUN', 'JULAI', 'OGOS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DISEMBER'];
             
-            document.getElementById('clock-day').innerText = days[now.getDay()];
-            document.getElementById('clock-time').innerText = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            document.getElementById('clock-date').innerText = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            if(document.getElementById('clock-day')) {
+                document.getElementById('clock-day').innerText = days[now.getDay()];
+                document.getElementById('clock-time').innerText = now.toLocaleTimeString('en-US', { hour12: true, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                document.getElementById('clock-date').innerText = `${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+            }
         }
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- UPLOAD LOGIC ---
+        // --- 3. AUTHENTICATION (GOOGLE LOGIN) ---
+        const loginBtn = document.getElementById('login-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+
+        loginBtn.addEventListener('click', async () => {
+            const { error } = await _supabase.auth.signInWithOAuth({
+                provider: 'google',
+                options: { redirectTo: window.location.href }
+            });
+            if (error) alert("Ralat Login: " + error.message);
+        });
+
+        logoutBtn.addEventListener('click', async () => {
+            await _supabase.auth.signOut();
+            window.location.reload();
+        });
+
+        // Pantau status login secara real-time
+        _supabase.auth.onAuthStateChange((event, session) => {
+            if (session) {
+                currentUser = session.user;
+                loginBtn.classList.add('hidden');
+                logoutBtn.classList.remove('hidden');
+                fetchData(); // Ambil data dari database bila dah login
+            } else {
+                currentUser = null;
+                loginBtn.classList.remove('hidden');
+                logoutBtn.classList.add('hidden');
+                document.getElementById('data-grid').innerHTML = '<p style="grid-column: 1/-1; text-align:center; opacity:0.5;">SILA LOG MASUK UNTUK LIHAT DATA</p>';
+            }
+        });
+
+        // --- 4. DATABASE LOGIC (UPLOAD & FETCH) ---
         function selectCategory(cat) {
             currentCategory = cat;
             document.getElementById('selected-label').innerText = `KATEGORI: ${cat.toUpperCase()} (SIAP UNTUK MUAT NAIK)`;
-            document.querySelectorAll('.category-card').forEach(c => c.style.borderColor = 'var(--primary)');
-            event.currentTarget.style.borderColor = 'var(--accent)';
+            // Efek visual pada border category
+            document.querySelectorAll('.category-card').forEach(c => {
+                c.style.borderColor = 'var(--primary)';
+                if(c.innerText === cat.toUpperCase()) c.style.borderColor = 'var(--accent)';
+            });
         }
 
         const fileInput = document.getElementById('file-input');
@@ -499,106 +537,109 @@
             if (file) handleUpload(file);
         });
 
-        function handleUpload(file) {
+        async function handleUpload(file) {
+            if (!currentUser) {
+                alert("Sila log masuk Google terlebih dahulu!");
+                return;
+            }
+
+            // Tunjukkan loading sederhana
+            document.getElementById('selected-label').innerText = "SEDANG MEMUAT NAIK... SILA TUNGGU.";
+
             const reader = new FileReader();
-            reader.onload = function(e) {
-                const item = {
-                    id: Date.now(),
-                    category: currentCategory,
-                    img: e.target.result,
-                    date: new Date().toLocaleDateString()
-                };
-                saveToLocal(item);
-                renderData();
+            reader.onload = async function(e) {
+                const base64Image = e.target.result;
+
+                // Masukkan data ke table 'uploads' di Supabase
+                const { error } = await _supabase
+                    .from('uploads')
+                    .insert([
+                        { 
+                            user_id: currentUser.id, 
+                            category: currentCategory, 
+                            image_url: base64Image 
+                        }
+                    ]);
+
+                if (error) {
+                    alert('Ralat Simpan Database: ' + error.message);
+                } else {
+                    alert('Data berjaya disimpan ke Cloud!');
+                    fetchData(); // Refresh senarai
+                }
+                document.getElementById('selected-label').innerText = "MUAT NAIK BERJAYA! PILIH KATEGORI LAIN?";
             };
             reader.readAsDataURL(file);
         }
 
-        function saveToLocal(item) {
-            let data = JSON.parse(localStorage.getItem('anime_data') || '[]');
-            data.push(item);
-            localStorage.setItem('anime_data', JSON.stringify(data));
-        }
+        async function fetchData() {
+            if (!currentUser) return;
 
-        function renderData() {
+            const { data, error } = await _supabase
+                .from('uploads')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) {
+                console.error('Ralat Ambil Data:', error.message);
+                return;
+            }
+
             const grid = document.getElementById('data-grid');
-            const data = JSON.parse(localStorage.getItem('anime_data') || '[]');
             grid.innerHTML = '';
             
             data.forEach(item => {
                 const card = document.createElement('div');
                 card.className = 'item-card';
                 card.innerHTML = `
-                    <img src="${item.img}" alt="upload">
-                    <div style="margin-top:10px;">
-                        <small style="color:var(--accent)">${item.category}</small>
-                        <p style="font-size:0.8rem">${item.date}</p>
+                    <img src="${item.image_url}" alt="upload">
+                    <div style="padding:10px;">
+                        <small style="color:var(--accent); display:block; margin-bottom:5px;">${item.category}</small>
+                        <p style="font-size:0.7rem; opacity:0.7;">DIMUAT NAIK PADA: ${new Date(item.created_at).toLocaleDateString()}</p>
+                        <button class="delete-btn" onclick="deleteItem('${item.id}')">PADAM DATA</button>
                     </div>
-                    <button class="delete-btn" onclick="deleteItem(${item.id})">PADAM</button>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        function deleteItem(id) {
-            let data = JSON.parse(localStorage.getItem('anime_data') || '[]');
-            data = data.filter(i => i.id !== id);
-            localStorage.setItem('anime_data', JSON.stringify(data));
-            renderData();
-        }
+        async function deleteItem(id) {
+            if (!confirm("Adakah anda pasti mahu memadam data ini dari pangkalan data?")) return;
 
-        // --- SUPABASE AUTH (GOOGLE) ---
-        const loginBtn = document.getElementById('login-btn');
-        const logoutBtn = document.getElementById('logout-btn');
+            const { error } = await _supabase
+                .from('uploads')
+                .delete()
+                .eq('id', id);
 
-        loginBtn.addEventListener('click', async () => {
-            const { data, error } = await supabase.auth.signInWithOAuth({
-                provider: 'google',
-            });
-            if (error) alert("Ralat Login: " + error.message);
-        });
-
-        logoutBtn.addEventListener('click', async () => {
-            await supabase.auth.signOut();
-            window.location.reload();
-        });
-
-        // Semak status login
-        async function checkUser() {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-                loginBtn.classList.add('hidden');
-                logoutBtn.classList.remove('hidden');
-                console.log("User logged in:", user.email);
+            if (error) {
+                alert("Gagal padam: " + error.message);
+            } else {
+                fetchData();
             }
         }
 
-        // --- MOUSE TRAIL EFFECT ---
+        // --- 5. EXTRA: MOUSE TRAIL EFFECT ---
         document.addEventListener('mousemove', (e) => {
             const trail = document.createElement('div');
             trail.style.position = 'fixed';
-            trail.style.width = '5px';
-            trail.style.height = '5px';
-            trail.style.background = 'var(--accent)';
+            trail.style.width = '4px';
+            trail.style.height = '4px';
+            trail.style.background = 'var(--primary)';
             trail.style.borderRadius = '50%';
             trail.style.pointerEvents = 'none';
             trail.style.left = e.clientX + 'px';
             trail.style.top = e.clientY + 'px';
-            trail.style.boxShadow = '0 0 10px var(--accent)';
+            trail.style.boxShadow = '0 0 8px var(--primary)';
             trail.style.zIndex = '9999';
             document.body.appendChild(trail);
 
             setTimeout(() => {
-                trail.style.transition = '0.5s';
+                trail.style.transition = '0.6s';
                 trail.style.opacity = '0';
-                trail.style.transform = 'scale(2)';
-                setTimeout(() => trail.remove(), 500);
+                trail.style.transform = 'scale(3)';
+                setTimeout(() => trail.remove(), 600);
             }, 50);
         });
-
-        // Initialize
-        renderData();
-        checkUser();
 
     </script>
 </body>
